@@ -5,52 +5,40 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#02070c">
 <title>JARVIS AI</title>
-
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#02060a;color:#dffaff;font-family:Arial,sans-serif;min-height:100vh}
-.app{max-width:1100px;margin:auto;padding:18px}
-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #17485a;padding-bottom:12px}
-.logo{font-size:26px;letter-spacing:4px;color:#7eeeff;font-weight:bold}
-.status{font-size:12px;color:#62d7e8}
-.reactor{height:330px;display:grid;place-items:center;position:relative}
-.core{width:105px;height:105px;border-radius:50%;background:radial-gradient(circle,#fff 0 7%,#8cf5ff 20%,#168da8 48%,transparent 70%);box-shadow:0 0 25px #27eaff,0 0 80px #087c99;animation:pulse 2s infinite}
-.ring{position:absolute;border:2px solid #28dff5;border-radius:50%;opacity:.7;animation:spin 10s linear infinite}.r1{width:150px;height:150px}.r2{width:215px;height:215px;animation-duration:14s;animation-direction:reverse}.r3{width:275px;height:275px;animation-duration:18s}.r4{width:320px;height:320px;animation-duration:24s;animation-direction:reverse}
-@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{50%{transform:scale(1.08);filter:brightness(1.4)}}
-.panel{background:#061017;border:1px solid #145267;border-radius:14px;padding:14px;box-shadow:0 0 20px #00151d}
-.chat{height:270px;overflow:auto;margin-bottom:12px}.msg{margin:8px 0;padding:10px 12px;border-radius:10px;background:#0b202a}.user{border-left:3px solid #67e9ff}.jarvis{border-left:3px solid #1a91a9}
-.controls{display:flex;gap:8px}.controls input{flex:1;background:#02080c;color:white;border:1px solid #1b5668;border-radius:9px;padding:12px;font-size:15px}.btn{background:#09212b;color:#a9f6ff;border:1px solid #1b6579;border-radius:9px;padding:10px 14px;cursor:pointer}.btn:hover{background:#0d3340}
-.quick{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.system{margin-top:14px;font-size:13px;color:#83c8d3;line-height:1.7}
-@media(max-width:600px){.app{padding:10px}.reactor{height:260px}.r4{width:250px;height:250px}.r3{width:220px;height:220px}.r2{width:175px;height:175px}.r1{width:130px;height:130px}.core{width:90px;height:90px}.controls{flex-wrap:wrap}.controls input{flex-basis:100%}}
+*{box-sizing:border-box}body{margin:0;background:#02060a;color:#dffaff;font-family:Arial,sans-serif;min-height:100vh}.app{max-width:1100px;margin:auto;padding:18px}header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #17485a;padding-bottom:12px}.logo{font-size:26px;letter-spacing:4px;color:#7eeeff;font-weight:bold}.status{font-size:12px;color:#62d7e8}.reactor{height:330px;display:grid;place-items:center;position:relative}.core{width:105px;height:105px;border-radius:50%;background:radial-gradient(circle,#fff 0 7%,#8cf5ff 20%,#168da8 48%,transparent 70%);box-shadow:0 0 25px #27eaff,0 0 80px #087c99;animation:pulse 2s infinite}.ring{position:absolute;border:2px solid #28dff5;border-radius:50%;opacity:.7;animation:spin 10s linear infinite}.r1{width:150px;height:150px}.r2{width:215px;height:215px;animation-duration:14s;animation-direction:reverse}.r3{width:275px;height:275px;animation-duration:18s}.r4{width:320px;height:320px;animation-duration:24s;animation-direction:reverse}@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{50%{transform:scale(1.08);filter:brightness(1.4)}}.panel{background:#061017;border:1px solid #145267;border-radius:14px;padding:14px;box-shadow:0 0 20px #00151d}.chat{height:270px;overflow:auto;margin-bottom:12px}.msg{margin:8px 0;padding:10px 12px;border-radius:10px;background:#0b202a}.user{border-left:3px solid #67e9ff}.jarvis{border-left:3px solid #1a91a9}.controls{display:flex;gap:8px}.controls input{flex:1;background:#02080c;color:white;border:1px solid #1b5668;border-radius:9px;padding:12px;font-size:15px}.btn{background:#09212b;color:#a9f6ff;border:1px solid #1b6579;border-radius:9px;padding:10px 14px;cursor:pointer}.btn:hover{background:#0d3340}.quick{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.system{margin-top:14px;font-size:13px;color:#83c8d3;line-height:1.7}.listening{box-shadow:0 0 16px #28dff5}@media(max-width:600px){.app{padding:10px}.reactor{height:260px}.r4{width:250px;height:250px}.r3{width:220px;height:220px}.r2{width:175px;height:175px}.r1{width:130px;height:130px}.core{width:90px;height:90px}.controls{flex-wrap:wrap}.controls input{flex-basis:100%}}
 </style>
 </head>
 <body>
 <div class="app">
-<header><div class="logo">JARVIS</div><div class="status">● ONLINE • LOCAL CORE</div></header>
+<header><div class="logo">JARVIS</div><div class="status" id="online">● ONLINE • LOCAL CORE</div></header>
 <section class="reactor"><div class="ring r4"></div><div class="ring r3"></div><div class="ring r2"></div><div class="ring r1"></div><div class="core"></div></section>
 <div class="panel">
 <div id="chat" class="chat"></div>
-<div class="controls"><input id="input" placeholder="Speak or type a command..." autocomplete="off"><button class="btn" onclick="send()">SEND</button><button class="btn" onclick="listen()">🎙</button></div>
-<div class="quick"><button class="btn" onclick="command('time')">Time</button><button class="btn" onclick="command('date')">Date</button><button class="btn" onclick="command('calculate 22+2')">Calculate</button><button class="btn" onclick="command('status')">Status</button><button class="btn" onclick="command('youtube')">YouTube</button><button class="btn" onclick="command('search')">Search</button></div>
+<div class="controls"><input id="input" placeholder="Speak or type a command..." autocomplete="off"><button class="btn" onclick="send()">SEND</button><button class="btn" id="mic" onclick="listen()">🎙</button></div>
+<div class="quick"><button class="btn" onclick="command('time')">Time</button><button class="btn" onclick="command('date')">Date</button><button class="btn" onclick="command('22+2')">Calculate</button><button class="btn" onclick="command('status')">Status</button><button class="btn" onclick="command('youtube')">YouTube</button><button class="btn" onclick="command('search Google')">Search</button><button class="btn" onclick="command('help')">Help</button><button class="btn" onclick="command('clear')">Clear</button></div>
 <div class="system" id="system">System ready. JARVIS local command engine initialized.</div>
 </div></div>
 <script>
-const chat=document.getElementById('chat'),input=document.getElementById('input');
-function add(who,text){const d=document.createElement('div');d.className='msg '+(who==='You'?'user':'jarvis');d.innerHTML='<b>'+who+':</b> '+text;chat.appendChild(d);chat.scrollTop=chat.scrollHeight}
-function speak(t){if('speechSynthesis'in window){speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.rate=.95;u.pitch=.85;speechSynthesis.speak(u)}}
+const chat=document.getElementById('chat'),input=document.getElementById('input'),system=document.getElementById('system'),mic=document.getElementById('mic');
+function add(who,text){const d=document.createElement('div');d.className='msg '+(who==='You'?'user':'jarvis');d.textContent=who+': '+text;chat.appendChild(d);chat.scrollTop=chat.scrollHeight}
+function speak(t){if('speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=.95;u.pitch=.85;speechSynthesis.speak(u)}}
 function reply(t){add('JARVIS',t);speak(t)}
 function command(text){input.value=text;send()}
-function send(){let text=input.value.trim();if(!text)return;add('You',text);input.value='';let c=text.toLowerCase().trim();let ans='I can handle local commands such as time, date, calculations, status, YouTube, and web search.';
+function safeCalc(expression){const e=expression.replace(/[^0-9+\-*/().%\s]/g,'').trim();if(!e)return null;try{if(!/^[0-9+\-*/().%\s]+$/.test(e))return null;const result=Function('"use strict";return ('+e+')')();return Number.isFinite(result)?result:null}catch(err){return null}}
+function send(){const text=input.value.trim();if(!text)return;add('You',text);input.value='';const c=text.toLowerCase().trim();let ans='I can handle time, date, calculations, status, YouTube, web search, help, and clear.';
 if(c==='hi'||c==='hello'||c.includes('hey jarvis'))ans='Hello. JARVIS systems are online.';
+else if(c==='help'||c==='commands'||c.includes('what can you do'))ans='Commands: time, date, calculate an expression, status, YouTube, search, who are you, clear, and help.';
+else if(c==='clear'||c==='clear chat'){chat.innerHTML='';ans='Chat cleared. Systems remain online.'}
 else if(c.includes('time'))ans='The current time is '+new Date().toLocaleTimeString();
 else if(c.includes('date')||c.includes('today'))ans='Today is '+new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-else if(c.includes('status'))ans='All local systems are operational. Reactor interface online.';
-else if(c.includes('youtube')){ans='Opening YouTube.';window.open('https://www.youtube.com/','_blank')}
-else if(c.includes('search')){let q=text.replace(/search( for)?/i,'').trim();if(q){ans='Searching the web for '+q+'.';window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank')}else ans='Tell me what you want to search for.'}
-else if(c.includes('calculate')||/^[0-9\s+\-*/().%]+$/.test(c)){let expression=text.replace(/calculate/i,'').trim();if(expression){try{let safe=expression.replace(/[^0-9+\-*/().%\s]/g,'');let result=Function('"use strict";return ('+safe+')')();ans='The answer is '+result+'.'}catch(e){ans='I could not calculate that expression.'}}else ans='Give me an expression to calculate.'}
+else if(c.includes('status'))ans='All local systems are operational. Reactor interface online. Local command engine ready.';
 else if(c.includes('who are you'))ans='I am JARVIS, your local browser assistant.';
+else if(c==='youtube'||c.includes('open youtube')){ans='Opening YouTube.';window.open('https://www.youtube.com/','_blank')}
+else if(c.startsWith('search')||c.startsWith('google')){let q=text.replace(/^(search|google)(\s+for)?/i,'').trim();if(q){ans='Searching the web for '+q+'.';window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank')}else ans='Tell me what you want to search for.'}
+else {let expression=text.replace(/^calculate\s*/i,'').trim();if(/^[0-9\s+\-*/().%]+$/.test(expression)){const result=safeCalc(expression);ans=result===null?'I could not calculate that expression.':'The answer is '+result+'.'}else if(c.includes('good morning'))ans='Good morning. JARVIS is ready for your commands.';else if(c.includes('good evening'))ans='Good evening. JARVIS is standing by.'}
 reply(ans)}
-function listen(){const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!Recognition){reply('Voice recognition is not supported in this browser.');return}const r=new Recognition();r.lang='en-IN';r.interimResults=false;r.onstart=()=>document.getElementById('system').textContent='Listening...';r.onresult=e=>{input.value=e.results[0][0].transcript;document.getElementById('system').textContent='Command received.';send()};r.onerror=e=>document.getElementById('system').textContent='Voice error: '+e.error;r.onend=()=>document.getElementById('system').textContent='System ready.';r.start()}
+function listen(){const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!Recognition){reply('Voice recognition is not available in this browser. Open the site directly in Chrome and allow microphone access.');return}const r=new Recognition();r.lang='en-IN';r.interimResults=false;r.continuous=false;r.maxAlternatives=1;r.onstart=()=>{system.textContent='Listening... Speak now.';mic.classList.add('listening')};r.onresult=e=>{input.value=e.results[0][0].transcript;system.textContent='Command received.';send()};r.onerror=e=>{system.textContent='Voice error: '+e.error;mic.classList.remove('listening')};r.onend=()=>{system.textContent='System ready.';mic.classList.remove('listening')};r.start()}
 add('JARVIS','Good evening. JARVIS is online. How may I assist you?');
 input.addEventListener('keydown',e=>{if(e.key==='Enter')send()});
 </script>
