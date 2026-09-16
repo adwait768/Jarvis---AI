@@ -29,7 +29,7 @@ async function callGemini(input) {
       "x-goog-api-key": apiKey
     },
     body: JSON.stringify({
-      model: "gemini-3.8-flash",
+      model: "gemini-3.1-flash-lite",
       input,
       system_instruction: SYSTEM,
       store: false
