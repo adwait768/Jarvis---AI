@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#02060d">
+<title>JARVIS — Sign in</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;color:#e8fbff;background:#02060d}body{display:grid;place-items:center;overflow:hidden;background-image:radial-gradient(circle at 50% 35%,rgba(0,205,255,.18),transparent 30%),linear-gradient(rgba(0,190,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,190,255,.025) 1px,transparent 1px);background-size:auto,32px 32px,32px 32px}.shell{width:min(430px,92vw);padding:34px;border:1px solid rgba(40,211,255,.45);border-radius:24px;background:rgba(2,15,27,.9);box-shadow:0 0 60px rgba(0,180,255,.12),inset 0 0 40px rgba(0,180,255,.035);backdrop-filter:blur(15px)}.logo{text-align:center;font-size:42px;font-weight:800;letter-spacing:10px;color:#b9f8ff;text-shadow:0 0 12px #fff,0 0 30px #00cfff}.tag{text-align:center;color:#70d9ed;font-size:11px;letter-spacing:2px;margin:8px 0 30px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}.tabs button,.btn{border:1px solid #1b6f88;background:#06202e;color:#baf5ff;border-radius:11px;padding:12px;cursor:pointer}.tabs button.active{border-color:#2be4ff;box-shadow:0 0 15px rgba(0,210,255,.15);background:#093044}label{display:block;font-size:11px;color:#75d8ea;letter-spacing:1px;margin:12px 0 6px}input{width:100%;padding:13px 14px;border-radius:11px;border:1px solid #18566c;background:#020b13;color:white;outline:none}input:focus{border-color:#2be4ff;box-shadow:0 0 15px rgba(0,210,255,.12)}.btn.primary{width:100%;margin-top:16px;background:linear-gradient(135deg,#0a526b,#073042);font-weight:700}.google{width:100%;margin-top:9px}.message{text-align:center;min-height:20px;color:#83ddec;font-size:12px;margin-top:14px}.legal{font-size:10px;color:#608d98;text-align:center;line-height:1.5;margin-top:22px}.credit{text-align:center;margin-top:24px;color:#426f7a;font-size:9px;letter-spacing:1px}.hidden{display:none}@media(max-height:650px){body{overflow:auto;padding:20px}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <div class="logo">JARVIS</div>
+  <div class="tag">YOUR PERSONAL AI ASSISTANT</div>
+  <div class="tabs"><button id="loginTab" class="active">LOG IN</button><button id="signupTab">SIGN UP</button></div>
+  <form id="authForm">
+    <label for="email">EMAIL</label><input id="email" type="email" autocomplete="email" required placeholder="you@example.com">
+    <label for="password">PASSWORD</label><input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="••••••••">
+    <div id="nameWrap" class="hidden"><label for="name">DISPLAY NAME</label><input id="name" type="text" autocomplete="name" maxlength="60" placeholder="What should JARVIS call you?"></div>
+    <button class="btn primary" id="submitBtn" type="submit">LOG IN</button>
+  </form>
+  <button class="btn google" id="googleBtn" type="button">Continue with Google</button>
+  <div class="message" id="message"></div>
+  <div class="legal">Your account is used to keep your JARVIS profile and conversations separate from other users.</div>
+  <div class="credit">MADE BY ADWAIT SURYAWANSHI • 768 COMMUNITY</div>
+</main>
+<script type="module">
+/*
+  AUTH SETUP:
+  This page uses Supabase Auth. Before production use, add the Supabase project URL
+  and publishable/anon key below (these are client-side values, not your Gemini secret).
+  Keep the Gemini API key only in Vercel Environment Variables.
+*/
+const SUPABASE_URL = window.JARVIS_SUPABASE_URL || '';
+const SUPABASE_KEY = window.JARVIS_SUPABASE_KEY || '';
+const APP_URL = './';
+let supabase = null;
+let mode='login';
+const $=id=>document.getElementById(id);
+function setMessage(t){$('message').textContent=t}
+function setMode(next){mode=next;$('loginTab').classList.toggle('active',mode==='login');$('signupTab').classList.toggle('active',mode==='signup');$('nameWrap').classList.toggle('hidden',mode==='login');$('submitBtn').textContent=mode==='login'?'LOG IN':'CREATE ACCOUNT';$('password').autocomplete=mode==='login'?'current-password':'new-password';setMessage('')}
+$('loginTab').onclick=()=>setMode('login');$('signupTab').onclick=()=>setMode('signup');
+async function loadAuth(){
+  if(!SUPABASE_URL||!SUPABASE_KEY){setMessage('Authentication is not configured yet. Ask the project owner to finish the Supabase setup.');return}
+  try{const mod=await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');supabase=mod.createClient(SUPABASE_URL,SUPABASE_KEY);const {data}=await supabase.auth.getSession();if(data.session) location.href=APP_URL}catch(e){setMessage('Authentication service could not be loaded.')}
+}
+$('authForm').onsubmit=async e=>{e.preventDefault();if(!supabase){setMessage('Authentication is not configured yet.');return}setMessage(mode==='login'?'Signing in…':'Creating your account…');const email=$('email').value.trim(),password=$('password').value,name=$('name').value.trim();let result;if(mode==='login'){result=await supabase.auth.signInWithPassword({email,password})}else{result=await supabase.auth.signUp({email,password,options:{data:{display_name:name},emailRedirectTo:new URL('./',location.href).href}})}if(result.error){setMessage(result.error.message);return}if(mode==='signup'&&!result.data.session){setMessage('Account created. Check your email to verify it, then log in.');return}location.href=APP_URL};
+$('googleBtn').onclick=async()=>{if(!supabase){setMessage('Authentication is not configured yet.');return}setMessage('Opening Google…');const {error}=await supabase.auth.signInWithOAuth({provider:'google',options:{redirectTo:new URL('./',location.href).href}});if(error)setMessage(error.message)};
+loadAuth();
+</script>
+</body>
+</html>
