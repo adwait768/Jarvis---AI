@@ -1,11 +1,12 @@
 function headers(origin = "") {
   const allowed = [
     "https://adwait768.github.io",
-    "https://jarvis-ai-swart-one.vercel.app"
+    "https://jarvis-ai-swart-one.vercel.app",
+    "https://jarvis-ai-adwait768.vercel.app"
   ];
   return {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": allowed.includes(origin) ? origin : allowed[1],
+    "Access-Control-Allow-Origin": allowed.includes(origin) ? origin : allowed[2],
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type"
   };
@@ -28,7 +29,7 @@ async function callGemini(input) {
       "x-goog-api-key": apiKey
     },
     body: JSON.stringify({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.8-flash",
       input,
       system_instruction: SYSTEM,
       store: false
