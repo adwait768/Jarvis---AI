@@ -32,6 +32,7 @@ async function callGemini(input) {
       model: "gemini-3.1-flash-lite",
       input,
       system_instruction: SYSTEM,
+      generation_config: { thinking_level: "low" },
       store: false
     })
   });
