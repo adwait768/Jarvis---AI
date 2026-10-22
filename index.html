@@ -191,6 +191,22 @@ function launchTarget(name){
 function runLocalAction(raw){
  const q=String(raw||'').trim().toLowerCase().replace(/[.!?]+$/,'');
  if(!q)return false;
+ // On the Android APK, ask the native bridge to launch installed apps before calling cloud AI.
+ const nativeOpen=q.match(/^(?:please\\s+)?(?:open|launch|start|go to)\\s+(youtube music|google maps|play store|youtube|whatsapp|instagram|facebook|telegram|spotify|chrome|gmail|maps|settings|calculator|phone|messages|photos)(?:\\s+app)?$/);
+ if(nativeOpen){
+  const appName=nativeOpen[1];
+  try{
+   const bridge=window.JARVIS_NATIVE||window.JarvisAndroid;
+   if(bridge&&typeof bridge.openApp==='function'&&bridge.openApp(appName)){
+    reply('Opening '+appName+'.',false);system.textContent='Android app launched • 768 AI ready';return true;
+   }
+  }catch(e){console.warn('Native app launch failed:',e)}
+  // If the app is not installed, known web services can still open in a browser.
+  const webFallback={youtube:'https://www.youtube.com', 'youtube music':'https://music.youtube.com', whatsapp:'https://wa.me/', instagram:'https://www.instagram.com', facebook:'https://www.facebook.com', telegram:'https://web.telegram.org', spotify:'https://open.spotify.com', chrome:'https://www.google.com', gmail:'https://mail.google.com', maps:'https://maps.google.com', 'google maps':'https://maps.google.com'};
+  const target=webFallback[appName];
+  if(target){openSite(target);reply('Opening '+appName+'. If the app is not installed, its website will open.',false);return true}
+  reply('I could not launch '+appName+'. Check that the app is installed on this Android device.',false);return true;
+ }
  if(/^(what time is it|time|show time)$/.test(q)){reply('The current time is '+new Date().toLocaleTimeString());return true}
  if(/^(what is the date|what is today|date|today|show date)$/.test(q)){reply('Today is '+new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'}));return true}
  if(/^(what can you do|capabilities|show capabilities)$/.test(q)){showCapabilities();reply('Here are my current capabilities.',false);return true}
