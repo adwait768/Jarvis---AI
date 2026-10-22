@@ -197,16 +197,17 @@ function runLocalAction(raw){
  if(/^(system status|status|show status)$/.test(q)){showStatus();reply('System status opened.',false);return true}
  if(/^(take me to notes|open notes|show notes|notes)$/.test(q)){openNotes();reply('Your notes are open.',false);return true}
  if(/^(open calculator|calculator|calculate|launch calculator)$/.test(q)){showCalculator();reply('Calculator opened.',false);return true}
+ const calc=q.match(/^calculate\\s+(.+)$/);if(calc){showCalculator();const field=document.getElementById('calcExpression');if(field){field.value=calc[1];calculateExpression()}return true}
  if(/^(open automation|automation|show automation|automation center)$/.test(q)){showAutomation();reply('Automation center opened.',false);return true}
- const openMatch=q.match(/^(?:please\\s+)?(?:open|launch|start|go to)\\s+(youtube|google|maps|google maps|gmail|whatsapp|instagram|chrome)(?:\\s+app)?$/);
+ const openMatch=q.match(/^(?:please\s+)?(?:open|launch|start|go to)\s+(youtube|google|maps|google maps|gmail|whatsapp|instagram|chrome)(?:\s+app)?$/);
  if(openMatch){
   let name=openMatch[1].replace('google maps','maps');
   const opened=launchTarget(name);
   if(opened){reply('Opening '+name+'.',false);return true}
  }
- const searchMatch=String(raw).trim().match(/^(?:search|google)\\s+(.+)$/i);
+ const searchMatch=String(raw).trim().match(/^(?:search|google)\s+(.+)$/i);
  if(searchMatch){const url='https://www.google.com/search?q='+encodeURIComponent(searchMatch[1]);const w=window.open(url,'_blank','noopener');if(!w)window.location.href=url;reply('Searching Google for '+searchMatch[1]+'.',false);return true}
- const timerMatch=q.match(/^(?:start )?timer(?: for)?\\s+(\\d+)\\s*(seconds?|secs?|minutes?|mins?)$/);
+ const timerMatch=q.match(/^(?:start )?timer(?: for)?\s+(\\d+)\s*(seconds?|secs?|minutes?|mins?)$/);
  if(timerMatch){const amount=Number(timerMatch[1]);const seconds=/^s|^sec/.test(timerMatch[2])?amount:amount*60;if(amount>0&&amount<=1440){startTimer(seconds);reply('Timer started for '+amount+' '+timerMatch[2]+'.',false);return true}}
  return false;
 }
