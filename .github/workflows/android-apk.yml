@@ -1,4 +1,4 @@
-name: Build JARVIS APK
+name: Build JARVIS AI APK
 
 on:
   workflow_dispatch:
@@ -6,9 +6,13 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - name: Checkout
@@ -24,13 +28,17 @@ jobs:
       - name: Prepare Android SDK
         shell: bash
         run: |
-          set -e
+          set -euo pipefail
           SDK_ROOT="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
           SDKMANAGER="$(find "$SDK_ROOT/cmdline-tools" -type f -name sdkmanager -path '*/bin/sdkmanager' | sort -V | tail -n 1)"
-          if [ -z "$SDKMANAGER" ]; then
-            echo "sdkmanager not found in $SDK_ROOT"
+          if [[ -z "$SDKMANAGER" ]]; then
+            echo "::error::sdkmanager not found under $SDK_ROOT/cmdline-tools"
+            find "$SDK_ROOT" -maxdepth 4 -type f -name sdkmanager -print || true
             exit 1
           fi
+
+          echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
+          echo "ANDROID_HOME=$SDK_ROOT" >> "$GITHUB_ENV"
           echo "Using sdkmanager: $SDKMANAGER"
           yes | "$SDKMANAGER" --licenses >/dev/null || true
           "$SDKMANAGER" "platform-tools" "platforms;android-36" "build-tools;36.0.0"
@@ -41,6 +49,18 @@ jobs:
           node-version: '22'
           cache: npm
 
+      - name: Validate project files
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f package.json || { echo "::error::package.json is missing"; exit 1; }
+          test -f package-lock.json || { echo "::error::package-lock.json is missing"; exit 1; }
+          test -f capacitor.config.json || { echo "::error::capacitor.config.json is missing"; exit 1; }
+          test -d www || { echo "::error::Capacitor webDir 'www' is missing"; exit 1; }
+          test -x android/gradlew || { echo "::error::Android Gradle wrapper is missing or not executable"; exit 1; }
+          node --version
+          npm --version
+
       - name: Install Node dependencies
         run: npm ci
 
@@ -48,11 +68,25 @@ jobs:
         run: npx cap sync android
 
       - name: Build APK
+        shell: bash
         working-directory: android
-        run: ./gradlew --no-daemon assembleDebug
+        run: |
+          set -euo pipefail
+          ./gradlew --no-daemon clean assembleDebug
+          APK_PATH="app/build/outputs/apk/debug/app-debug.apk"
+          if [[ ! -s "$APK_PATH" ]]; then
+            echo "::error::Build finished without a non-empty debug APK at $APK_PATH"
+            find app/build/outputs -maxdepth 6 -type f -print 2>/dev/null || true
+            exit 1
+          fi
+          echo "APK generated successfully:"
+          ls -lh "$APK_PATH"
+          sha256sum "$APK_PATH"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: JARVIS-debug-APK
+          name: JARVIS-AI-debug-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
