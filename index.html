@@ -167,7 +167,63 @@ function add(who,text){const d=document.createElement('div');d.className='msg '+
   toast('Opening website');
  }catch(err){window.location.href=url}
 }function focusInput(){input.focus()}
-async function send(){const raw=input.value.trim();if(!raw)return;add('You',raw);input.value='';system.textContent='768 AI is thinking...';document.getElementById('coreState').textContent='THINKING';try{const res=await fetch(location.hostname.endsWith('vercel.app')?'/api/chat':VERCEL_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:raw,history:history.slice(-12)})});const data=await res.json();if(!res.ok||!data.reply)throw new Error(data.error||'AI service error');history.push({role:'user',text:raw},{role:'model',text:data.reply});history=history.slice(-12);reply(data.reply)}catch(err){system.textContent='AI unavailable • local core active';handleLocal(raw);toast('Cloud AI unavailable; local mode used')}finally{document.getElementById('coreState').textContent='READY'}}
+function launchTarget(name){
+ const targets={
+  youtube:{url:'https://www.youtube.com',pkg:'com.google.android.youtube',web:'https://www.youtube.com'},
+  google:{url:'https://www.google.com',pkg:'com.google.android.googlequicksearchbox',web:'https://www.google.com'},
+  maps:{url:'https://maps.google.com',pkg:'com.google.android.apps.maps',web:'https://maps.google.com'},
+  gmail:{url:'https://mail.google.com',pkg:'com.google.android.gm',web:'https://mail.google.com'},
+  whatsapp:{url:'https://wa.me/',pkg:'com.whatsapp',web:'https://wa.me/'},
+  instagram:{url:'https://www.instagram.com',pkg:'com.instagram.android',web:'https://www.instagram.com'},
+  chrome:{url:'https://www.google.com',pkg:'com.android.chrome',web:'https://www.google.com'}
+ };
+ const t=targets[name];if(!t)return false;
+ const isAndroid=/Android/i.test(navigator.userAgent);
+ if(isAndroid){
+  const fallback=encodeURIComponent(t.web);
+  const intent='intent://'+t.url.replace(/^https?:\\/\\//,'')+'#Intent;scheme=https;package='+t.pkg+';S.browser_fallback_url='+fallback+';end';
+  try{window.location.href=intent;system.textContent='Trying to open '+name+' app…';return true}catch(e){}
+ }
+ const win=window.open(t.web,'_blank','noopener');
+ if(!win){window.location.href=t.web}
+ system.textContent='Opening '+name+'…';return true;
+}
+function runLocalAction(raw){
+ const q=String(raw||'').trim().toLowerCase().replace(/[.!?]+$/,'');
+ if(!q)return false;
+ if(/^(what time is it|time|show time)$/.test(q)){reply('The current time is '+new Date().toLocaleTimeString());return true}
+ if(/^(what is the date|what is today|date|today|show date)$/.test(q)){reply('Today is '+new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'}));return true}
+ if(/^(what can you do|capabilities|show capabilities)$/.test(q)){showCapabilities();reply('Here are my current capabilities.',false);return true}
+ if(/^(system status|status|show status)$/.test(q)){showStatus();reply('System status opened.',false);return true}
+ if(/^(take me to notes|open notes|show notes|notes)$/.test(q)){openNotes();reply('Your notes are open.',false);return true}
+ if(/^(open calculator|calculator|calculate|launch calculator)$/.test(q)){showCalculator();reply('Calculator opened.',false);return true}
+ if(/^(open automation|automation|show automation|automation center)$/.test(q)){showAutomation();reply('Automation center opened.',false);return true}
+ const openMatch=q.match(/^(?:please\\s+)?(?:open|launch|start|go to)\\s+(youtube|google|maps|google maps|gmail|whatsapp|instagram|chrome)(?:\\s+app)?$/);
+ if(openMatch){
+  let name=openMatch[1].replace('google maps','maps');
+  const opened=launchTarget(name);
+  if(opened){reply('Opening '+name+'.',false);return true}
+ }
+ const searchMatch=String(raw).trim().match(/^(?:search|google)\\s+(.+)$/i);
+ if(searchMatch){const url='https://www.google.com/search?q='+encodeURIComponent(searchMatch[1]);const w=window.open(url,'_blank','noopener');if(!w)window.location.href=url;reply('Searching Google for '+searchMatch[1]+'.',false);return true}
+ const timerMatch=q.match(/^(?:start )?timer(?: for)?\\s+(\\d+)\\s*(seconds?|secs?|minutes?|mins?)$/);
+ if(timerMatch){const amount=Number(timerMatch[1]);const seconds=/^s|^sec/.test(timerMatch[2])?amount:amount*60;if(amount>0&&amount<=1440){startTimer(seconds);reply('Timer started for '+amount+' '+timerMatch[2]+'.',false);return true}}
+ return false;
+}
+async function send(){
+ const raw=input.value.trim();if(!raw)return;
+ add('You',raw);input.value='';
+ if(runLocalAction(raw)){system.textContent='Shortcut completed • 768 AI ready';return}
+ system.textContent='768 AI is thinking...';document.getElementById('coreState').textContent='THINKING';
+ try{
+  const endpoint=location.hostname.endsWith('vercel.app')?'/api/chat':VERCEL_API;
+  const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:raw,history:history.slice(-12)})});
+  const data=await res.json();
+  if(!res.ok||!data.reply)throw new Error(data.error||'AI service error');
+  history.push({role:'user',text:raw},{role:'model',text:data.reply});history=history.slice(-12);reply(data.reply);
+ }catch(err){system.textContent='AI unavailable • local core active';handleLocal(raw);toast('Cloud AI unavailable; local mode used')}
+ finally{document.getElementById('coreState').textContent='READY'}
+}
 function handleLocal(raw){let c=raw.toLowerCase().trim(),ans='I am here, Adwait. Cloud AI is temporarily unavailable, but my local command core is still active.';if(/^((hi|hello|hey)( jarvis)?)$/.test(c)||c.includes('good morning')||c.includes('good evening'))ans='Hello Adwait. I am online and ready.';else if(c.includes('who are you'))ans='I am 768 AI, your personal AI assistant, created for Adwait Suryawanshi.';else if(c.includes('owner')||c.includes('created by'))ans='My owner is Adwait Suryawanshi.';else if(c.includes('time'))ans='The current time is '+new Date().toLocaleTimeString();else if(c.includes('date')||c.includes('today'))ans='Today is '+new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});else if(c.includes('youtube')){ans='Opening YouTube.';openSite('https://www.youtube.com')}else if(c.includes('open google')){ans='Opening Google.';openSite('https://www.google.com')}else if(c.startsWith('search ')){let q=raw.replace(/^search\s+/i,'').trim();ans='Searching for '+q+'.';openSite('https://www.google.com/search?q='+encodeURIComponent(q))}else if(c.includes('calculate')||/^[0-9\s+\-*/().%]+$/.test(c)){let ex=raw.replace(/calculate/i,'').trim();try{let s=ex.replace(/[^0-9+\-*/().%\s]/g,'');ans='The answer is '+Function('"use strict";return ('+s+')')()+'.'}catch(e){ans='I could not calculate that expression.'}}else if(c.includes('note')||c.includes('remember')){openNotes();ans='Notes panel opened.'}else if(c.includes('clear chat')){chat.innerHTML='';ans='Chat cleared.'}else if(c.includes('stop speaking')||c.includes('be quiet')){speechSynthesis.cancel();ans='Voice output stopped.'}reply(ans)}
 function listen(){const R=window.SpeechRecognition||window.webkitSpeechRecognition;if(!R){reply('Voice recognition is not supported in this browser.');return}if(listening){recognition?.stop();return}recognition=new R();recognition.lang='en-IN';recognition.interimResults=false;recognition.continuous=false;recognition.maxAlternatives=1;listening=true;app.classList.add('listening');document.getElementById('coreState').textContent='LISTENING';system.textContent='Listening... speak now';recognition.onresult=e=>{input.value=e.results[0][0].transcript;send()};recognition.onerror=e=>{system.textContent='Voice error: '+e.error;if(e.error==='not-allowed')toast('Microphone permission is required')};recognition.onend=()=>{listening=false;app.classList.remove('listening');document.getElementById('coreState').textContent='READY'};try{recognition.start()}catch(e){listening=false}}
 function quickAction(action){
