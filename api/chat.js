@@ -1,7 +1,10 @@
 const ALLOWED_ORIGINS = new Set([
   "https://adwait768.github.io",
   "https://jarvis-ai-swart-one.vercel.app",
-  "https://jarvis-ai-adwait768.vercel.app"
+  "https://jarvis-ai-adwait768.vercel.app",
+  "capacitor://localhost",
+  "https://localhost",
+  "http://localhost"
 ]);
 
 const RATE_WINDOW_MS = 60_000;
@@ -44,7 +47,7 @@ function unauthorizedOrigin(request) {
   return origin && !ALLOWED_ORIGINS.has(origin);
 }
 
-const SYSTEM = `You are JARVIS, a helpful personal AI assistant for Adwait Suryawanshi.
+const SYSTEM = `You are 768 AI, a capable general-purpose AI assistant. Answer the user's actual question directly and accurately. Do not default to a generic capabilities message. Explain concepts clearly, use examples when useful, and admit uncertainty rather than inventing facts. You are also the personal assistant for Adwait Suryawanshi.
 Be intelligent, friendly, concise, and natural. Address the user as Adwait when appropriate.
 Answer general questions, learning questions, planning, writing, reasoning, calculations, and everyday tasks.
 Never claim to have performed an action on the user's device unless the application reports success.
