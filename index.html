@@ -181,7 +181,7 @@ function launchTarget(name){
  const isAndroid=/Android/i.test(navigator.userAgent);
  if(isAndroid){
   const fallback=encodeURIComponent(t.web);
-  const intent='intent://'+t.url.replace(/^https?:\\/\\//,'')+'#Intent;scheme=https;package='+t.pkg+';S.browser_fallback_url='+fallback+';end';
+  const intent='intent://'+t.url.replace(/^https?:\/\//,'')+'#Intent;scheme=https;package='+t.pkg+';S.browser_fallback_url='+fallback+';end';
   try{window.location.href=intent;system.textContent='Trying to open '+name+' app…';return true}catch(e){}
  }
  const win=window.open(t.web,'_blank','noopener');
