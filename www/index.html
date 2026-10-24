@@ -133,6 +133,33 @@ body{overscroll-behavior-y:contain}
 }
 @media(prefers-reduced-motion:reduce){.chat{scroll-behavior:auto}}
 
+
+/* Fixed-screen layout + subtle side light trails only while AI is searching */
+html,body{height:100%;min-height:0;overflow:hidden!important;overscroll-behavior:none}
+body{width:100%;position:relative}
+.app{height:100dvh;max-height:100dvh;overflow:hidden;display:flex;flex-direction:column;padding-bottom:8px!important}
+.layout{flex:1 1 auto;min-height:0;overflow:hidden}
+.center{min-height:0;overflow:hidden}
+.center>.panel{min-height:0!important;overflow:hidden}
+.chat{min-height:0!important;flex:1 1 auto;height:auto!important;max-height:100%;overflow-y:auto!important;overscroll-behavior:contain}
+.footer{flex:0 0 auto;margin-top:8px}
+body.searching:after,body.searching .app:after{content:"";position:fixed;pointer-events:none;z-index:8;width:100px;height:55vh;top:22%;opacity:.75;border:2px solid transparent;border-radius:50%;filter:blur(.5px);animation:sideLight 2.8s ease-in-out infinite alternate}
+body.searching:after{left:-64px;border-right-color:rgba(86,224,255,.8);border-top-color:rgba(156,113,255,.7);transform:rotate(18deg);box-shadow:8px 0 18px rgba(76,176,255,.16)}
+body.searching .app:after{right:-64px;border-left-color:rgba(255,91,214,.72);border-bottom-color:rgba(86,224,255,.78);transform:rotate(-18deg);box-shadow:-8px 0 18px rgba(175,91,255,.15)}
+@keyframes sideLight{0%{translate:0 -10px;scale:.92;opacity:.35}100%{translate:0 10px;scale:1.08;opacity:.85}}
+@media(max-width:700px){
+ .app{padding:6px 8px 8px!important}
+ .top{flex:0 0 auto}
+ .layout{display:flex!important;flex:1 1 auto;min-height:0!important;margin-top:7px!important}
+ .center{width:100%;flex:1 1 auto;min-height:0!important}
+ .center>.panel{display:flex;flex:1 1 auto;min-height:0!important}
+ .chat{height:auto!important;flex:1 1 auto;min-height:0!important;max-height:none}
+ .nav,.right,.footer{display:none!important}
+ .reactor{flex:0 0 auto;height:clamp(58px,9dvh,88px)!important}
+ .quickGrid{flex:0 0 auto}
+}
+@media(prefers-reduced-motion:reduce){body.searching:after,body.searching .app:after{animation:none;opacity:.35}}
+
 /* APK fluid search border and black idle screen */
 html,body{background:#000!important}body{background-image:none!important}
 body.searching:before{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;padding:3px;background:conic-gradient(from 0deg,#ff2bd6,#8b5cff,#16d9ff,#40ffb2,#ffe45e,#ff713d,#ff2bd6);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:apkEdge 2.5s linear infinite;filter:drop-shadow(0 0 8px rgba(130,85,255,.6))}
