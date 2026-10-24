@@ -164,6 +164,32 @@ body{background-image:none!important;color:#eef3ff}
 @keyframes fluidCore{from{transform:scale(.94);filter:hue-rotate(0deg) brightness(1)}to{transform:scale(1.09);filter:hue-rotate(35deg) brightness(1.3)}}
 @media(prefers-reduced-motion:reduce){.searching .ring,.searching .reactor:before,.searching .reactor:after,.searching .core{animation:none!important}}
 
+
+/* MOBILE-FIRST SEARCH STATE: black idle screen + fluid edge light */
+html,body{background:#000!important}
+body{background-image:none!important}
+body.searching{background:#000!important}
+body.searching:before{
+ content:"";position:fixed;inset:0;z-index:999;pointer-events:none;
+ padding:3px;border-radius:0;
+ background:conic-gradient(from var(--edge-angle,0deg),#ff2bd6,#8b5cff,#16d9ff,#40ffb2,#ffe45e,#ff713d,#ff2bd6);
+ -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+ -webkit-mask-composite:xor;mask-composite:exclude;
+ opacity:.95;filter:drop-shadow(0 0 7px rgba(90,110,255,.55));
+ animation:edgeFlow 2.8s linear infinite;
+}
+body.searching .reactor{border-color:transparent;box-shadow:inset 0 0 55px rgba(115,50,255,.12)}
+body.searching .ring{border-color:rgba(160,110,255,.7);box-shadow:0 0 16px rgba(170,70,255,.45),0 0 38px rgba(0,210,255,.18)}
+body.searching .r1{border-top-color:#ff4bc9;border-right-color:#8a5cff}
+body.searching .r2{border-top-color:#25e3ff;border-left-color:#b65cff}
+body.searching .r3{border-top-color:#7dffbe;border-right-color:#ff8d52}
+body.searching .r4{border-top-color:#ffe45e;border-left-color:#ff55c8}
+body.searching .core{background:radial-gradient(circle,#fff 0 4%,#fff1ff 10%,#ff8de5 22%,#985dff 43%,#153d80 64%,transparent 76%);box-shadow:0 0 28px #ff55d4,0 0 65px rgba(132,65,255,.65),0 0 115px rgba(0,205,255,.3);animation:fluidCore 1.25s ease-in-out infinite}
+@keyframes edgeFlow{to{--edge-angle:360deg}}
+@property --edge-angle{syntax:"<angle>";initial-value:0deg;inherits:false}
+@keyframes fluidCore{0%,100%{transform:scale(.96);filter:hue-rotate(0deg) brightness(1)}50%{transform:scale(1.09);filter:hue-rotate(45deg) brightness(1.35)}}
+@media(max-width:620px){body.searching:before{padding:2px}.app{padding-bottom:calc(18px + env(safe-area-inset-bottom))}}
+@media(prefers-reduced-motion:reduce){body.searching:before,body.searching .core{animation:none!important}}
 </style></head><body><div class="app" id="app"><header class="top"><div class="brand"><h1>768 AI</h1><p>PERSONAL AI • BY 768 COMMUNITY</p></div><div class="ownerTop">OWNER: <strong>ADWAIT SURYAWANSHI</strong><br><span>THINK • SPEAK • CREATE • GET IT DONE</span></div><div class="clock"><b id="clock">--:--</b><span id="today"></span><br><span class="online">● SYSTEM ONLINE</span></div></header><div class="layout"><aside class="panel nav"><b>COMMAND CENTER</b><button onclick="sayIntro()">⌂ Home</button><button onclick="focusInput()">☷ Chat</button><button onclick="listen()">🎙 Voice Control</button><button onclick="showAutomation()">⚙ Automation</button><button onclick="openSite('https://www.google.com')">⌕ Search</button><button onclick="openSite('https://www.youtube.com')">▶ Entertainment</button><button onclick="showStatus()">▣ System Info</button><button onclick="showSettings()">⚙ Settings</button></aside><section class="center"><div class="reactor" id="reactor"><div class="ring r4"></div><div class="ring r3"></div><div class="ring r2"></div><div class="ring r1"></div><div class="core"><span>768 AI<small id="coreState">READY</small></span></div></div><div class="panel"><div id="chat" class="chat"></div><div class="controls composer" role="group" aria-label="Message composer"><input id="input" autocomplete="off" aria-label="Message 768 AI" placeholder="Message 768 AI..."><button class="btn mic" type="button" onclick="listen()" title="Voice input" aria-label="Start voice input">🎙</button><button class="btn sendBtn" type="button" onclick="send()" title="Send message" aria-label="Send message">↑</button></div><div class="quickGrid" id="quickActions"><button class="btn" type="button" data-action="time">🕐 Time</button><button class="btn" type="button" data-action="date">📅 Date</button><button class="btn" type="button" data-action="calculator">🧮 Calculator</button><button class="btn" type="button" data-action="capabilities">❓ Capabilities</button><button class="btn" type="button" data-action="youtube">▶ YouTube</button><button class="btn" type="button" data-action="google">G Google</button><button class="btn" type="button" data-action="notes">📝 Notes</button><button class="btn" type="button" data-action="status">▣ Status</button></div><div class="system" id="system">768 AI AI core ready • Secure Gemini backend connected through Vercel</div></div></section><aside class="panel right"><span class="sideTitle">AI CAPABILITIES</span><div class="features"><div>Real AI conversation</div><div>Voice commands</div><div>Learning help</div><div>Planning & reasoning</div><div>Web shortcuts</div><div>Calculations</div><div>Notes & memory</div><div>Timers</div><div>Personal command shortcuts</div><div>Secure server-side AI</div></div><div class="panel quote">“More than an assistant — a friend who listens, helps and gets things done.”<br><br>— 768 AI • 768 COMMUNITY</div></aside></div><footer class="footer"><strong>♛ 768 COMMUNITY • CREATED BY ADWAIT SURYAWANSHI</strong><small>768 AI • VOICE • AI • AUTOMATION • 768 COMMUNITY</small></footer></div><div class="toast" id="toast"></div><div class="modal" id="modal"><div class="modalBox panel" id="modalContent"></div></div><script>
 const OWNER='Adwait Suryawanshi';const VERCEL_API='https://jarvis-ai-swart-one.vercel.app/api/chat';const chat=document.getElementById('chat'),input=document.getElementById('input'),system=document.getElementById('system'),app=document.getElementById('app');let recognition=null,listening=false,timerHandle=null,history=[];
 function add(who,text){const d=document.createElement('div');d.className='msg '+(who==='You'?'user':'');d.innerHTML='<b>'+who+':</b> '+escapeHtml(text);chat.appendChild(d);chat.scrollTop=chat.scrollHeight}function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}function speak(t){if('speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=.94;u.pitch=.82;u.volume=1;speechSynthesis.speak(u)}}function reply(t,voice=true){add('768 AI',t);if(voice)speak(t);system.textContent='AI response complete • 768 AI ready'}function command(t){input.value=t;send()}function toast(t){const x=document.getElementById('toast');x.textContent=t;x.style.display='block';clearTimeout(x._t);x._t=setTimeout(()=>x.style.display='none',2400)}function openSite(url){
@@ -245,7 +271,7 @@ function runLocalAction(raw){
  if(timerMatch){const amount=Number(timerMatch[1]);const seconds=/^s|^sec/.test(timerMatch[2])?amount:amount*60;if(amount>0&&amount<=1440){startTimer(seconds);reply('Timer started for '+amount+' '+timerMatch[2]+'.',false);return true}}
  return false;
 }
-async function send(){
+async async function send(){
  const raw=input.value.trim();if(!raw)return;
  add('You',raw);input.value='';
  if(runLocalAction(raw)){system.textContent='Shortcut completed • 768 AI ready';return}
