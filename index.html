@@ -190,6 +190,33 @@ body.searching .core{background:radial-gradient(circle,#fff 0 4%,#fff1ff 10%,#ff
 @keyframes fluidCore{0%,100%{transform:scale(.96);filter:hue-rotate(0deg) brightness(1)}50%{transform:scale(1.09);filter:hue-rotate(45deg) brightness(1.35)}}
 @media(max-width:620px){body.searching:before{padding:2px}.app{padding-bottom:calc(18px + env(safe-area-inset-bottom))}}
 @media(prefers-reduced-motion:reduce){body.searching:before,body.searching .core{animation:none!important}}
+
+/* Fixed-screen layout + subtle side light trails only while AI is searching */
+html,body{height:100%;min-height:0;overflow:hidden!important;overscroll-behavior:none}
+body{width:100%;position:relative}
+.app{height:100dvh;max-height:100dvh;overflow:hidden;display:flex;flex-direction:column;padding-bottom:8px!important}
+.layout{flex:1 1 auto;min-height:0;overflow:hidden}
+.center{min-height:0;overflow:hidden}
+.center>.panel{min-height:0!important;overflow:hidden}
+.chat{min-height:0!important;flex:1 1 auto;height:auto!important;max-height:100%;overflow-y:auto!important;overscroll-behavior:contain}
+.footer{flex:0 0 auto;margin-top:8px}
+body.searching:after,body.searching .app:after{content:"";position:fixed;pointer-events:none;z-index:8;width:100px;height:55vh;top:22%;opacity:.75;border:2px solid transparent;border-radius:50%;filter:blur(.5px);animation:sideLight 2.8s ease-in-out infinite alternate}
+body.searching:after{left:-64px;border-right-color:rgba(86,224,255,.8);border-top-color:rgba(156,113,255,.7);transform:rotate(18deg);box-shadow:8px 0 18px rgba(76,176,255,.16)}
+body.searching .app:after{right:-64px;border-left-color:rgba(255,91,214,.72);border-bottom-color:rgba(86,224,255,.78);transform:rotate(-18deg);box-shadow:-8px 0 18px rgba(175,91,255,.15)}
+@keyframes sideLight{0%{translate:0 -10px;scale:.92;opacity:.35}100%{translate:0 10px;scale:1.08;opacity:.85}}
+@media(max-width:700px){
+ .app{padding:6px 8px 8px!important}
+ .top{flex:0 0 auto}
+ .layout{display:flex!important;flex:1 1 auto;min-height:0!important;margin-top:7px!important}
+ .center{width:100%;flex:1 1 auto;min-height:0!important}
+ .center>.panel{display:flex;flex:1 1 auto;min-height:0!important}
+ .chat{height:auto!important;flex:1 1 auto;min-height:0!important;max-height:none}
+ .nav,.right,.footer{display:none!important}
+ .reactor{flex:0 0 auto;height:clamp(58px,9dvh,88px)!important}
+ .quickGrid{flex:0 0 auto}
+}
+@media(prefers-reduced-motion:reduce){body.searching:after,body.searching .app:after{animation:none;opacity:.35}}
+
 </style></head><body><div class="app" id="app"><header class="top"><div class="brand"><h1>768 AI</h1><p>PERSONAL AI • BY 768 COMMUNITY</p></div><div class="ownerTop">OWNER: <strong>ADWAIT SURYAWANSHI</strong><br><span>THINK • SPEAK • CREATE • GET IT DONE</span></div><div class="clock"><b id="clock">--:--</b><span id="today"></span><br><span class="online">● SYSTEM ONLINE</span></div></header><div class="layout"><aside class="panel nav"><b>COMMAND CENTER</b><button onclick="sayIntro()">⌂ Home</button><button onclick="focusInput()">☷ Chat</button><button onclick="listen()">🎙 Voice Control</button><button onclick="showAutomation()">⚙ Automation</button><button onclick="openSite('https://www.google.com')">⌕ Search</button><button onclick="openSite('https://www.youtube.com')">▶ Entertainment</button><button onclick="showStatus()">▣ System Info</button><button onclick="showSettings()">⚙ Settings</button></aside><section class="center"><div class="reactor" id="reactor"><div class="ring r4"></div><div class="ring r3"></div><div class="ring r2"></div><div class="ring r1"></div><div class="core"><span>768 AI<small id="coreState">READY</small></span></div></div><div class="panel"><div id="chat" class="chat"></div><div class="controls composer" role="group" aria-label="Message composer"><input id="input" autocomplete="off" aria-label="Message 768 AI" placeholder="Message 768 AI..."><button class="btn mic" type="button" onclick="listen()" title="Voice input" aria-label="Start voice input">🎙</button><button class="btn sendBtn" type="button" onclick="send()" title="Send message" aria-label="Send message">↑</button></div><div class="quickGrid" id="quickActions"><button class="btn" type="button" data-action="time">🕐 Time</button><button class="btn" type="button" data-action="date">📅 Date</button><button class="btn" type="button" data-action="calculator">🧮 Calculator</button><button class="btn" type="button" data-action="capabilities">❓ Capabilities</button><button class="btn" type="button" data-action="youtube">▶ YouTube</button><button class="btn" type="button" data-action="google">G Google</button><button class="btn" type="button" data-action="notes">📝 Notes</button><button class="btn" type="button" data-action="status">▣ Status</button></div><div class="system" id="system">768 AI AI core ready • Secure Gemini backend connected through Vercel</div></div></section><aside class="panel right"><span class="sideTitle">AI CAPABILITIES</span><div class="features"><div>Real AI conversation</div><div>Voice commands</div><div>Learning help</div><div>Planning & reasoning</div><div>Web shortcuts</div><div>Calculations</div><div>Notes & memory</div><div>Timers</div><div>Personal command shortcuts</div><div>Secure server-side AI</div></div><div class="panel quote">“More than an assistant — a friend who listens, helps and gets things done.”<br><br>— 768 AI • 768 COMMUNITY</div></aside></div><footer class="footer"><strong>♛ 768 COMMUNITY • CREATED BY ADWAIT SURYAWANSHI</strong><small>768 AI • VOICE • AI • AUTOMATION • 768 COMMUNITY</small></footer></div><div class="toast" id="toast"></div><div class="modal" id="modal"><div class="modalBox panel" id="modalContent"></div></div><script>
 const OWNER='Adwait Suryawanshi';const VERCEL_API='https://jarvis-ai-swart-one.vercel.app/api/chat';const chat=document.getElementById('chat'),input=document.getElementById('input'),system=document.getElementById('system'),app=document.getElementById('app');let recognition=null,listening=false,timerHandle=null,history=[];
 function add(who,text){const d=document.createElement('div');d.className='msg '+(who==='You'?'user':'');d.innerHTML='<b>'+who+':</b> '+escapeHtml(text);chat.appendChild(d);chat.scrollTop=chat.scrollHeight}function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}function speak(t){if('speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=.94;u.pitch=.82;u.volume=1;speechSynthesis.speak(u)}}function reply(t,voice=true){add('768 AI',t);if(voice)speak(t);system.textContent='AI response complete • 768 AI ready'}function command(t){input.value=t;send()}function toast(t){const x=document.getElementById('toast');x.textContent=t;x.style.display='block';clearTimeout(x._t);x._t=setTimeout(()=>x.style.display='none',2400)}function openSite(url){
@@ -258,7 +285,6 @@ function runLocalAction(raw){
  if(/^(take me to notes|open notes|show notes|notes)$/.test(q)){openNotes();reply('Your notes are open.',false);return true}
  if(/^(open calculator|calculator|calculate|launch calculator)$/.test(q)){showCalculator();reply('Calculator opened.',false);return true}
  const calc=q.match(/^calculate\s+(.+)$/);if(calc){showCalculator();const field=document.getElementById('calcExpression');if(field){field.value=calc[1];calculateExpression()}return true}
- if(/^(open automation|automation|show automation|automation center)$/.test(q)){showAutomation();reply('Automation center opened.',false);return true}
  const openMatch=q.match(/^(?:please\s+)?(?:open|launch|start|go to)\s+(youtube|google|maps|google maps|gmail|whatsapp|instagram|chrome)(?:\s+app)?$/);
  if(openMatch){
   let name=openMatch[1].replace('google maps','maps');
@@ -271,7 +297,7 @@ function runLocalAction(raw){
  if(timerMatch){const amount=Number(timerMatch[1]);const seconds=/^s|^sec/.test(timerMatch[2])?amount:amount*60;if(amount>0&&amount<=1440){startTimer(seconds);reply('Timer started for '+amount+' '+timerMatch[2]+'.',false);return true}}
  return false;
 }
-async async function send(){
+async function send(){
  const raw=input.value.trim();if(!raw)return;
  add('You',raw);input.value='';
  if(runLocalAction(raw)){system.textContent='Shortcut completed • 768 AI ready';return}
