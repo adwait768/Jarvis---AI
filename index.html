@@ -325,8 +325,8 @@ function quickAction(action){
  if(action==='date'){reply('Today is '+new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'}));return}
  if(action==='calculator'){showCalculator();return}
  if(action==='capabilities'){showCapabilities();return}
- if(action==='youtube'){openSite('https://www.youtube.com/');reply('Launching YouTube. If the app is unavailable, your browser will open the website.',false);return}
- if(action==='google'){openSite('https://www.google.com/');reply('Launching Google. If the app is unavailable, your browser will open the website.',false);return}
+ if(action==='youtube'){command('Help me use YouTube without opening the app');return}
+ if(action==='google'){command('Help me search with Google without opening the app');return}
  if(action==='notes'){openNotes();return}
  if(action==='status'){showStatus();return}
 }
