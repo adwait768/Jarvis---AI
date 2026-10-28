@@ -231,7 +231,7 @@ const OWNER='Adwait Suryawanshi',chat=document.getElementById('chat'),input=docu
 function runLocalAction(raw){
  const q=String(raw||'').trim().toLowerCase().replace(/[.!?]+$/,'');
  if(!q)return false;
- const app=q.match(/^(?:please\\s+)?(?:open|launch|start|go to)\\s+(youtube music|google maps|play store|youtube|google|whatsapp|instagram|facebook|telegram|spotify|chrome|gmail|maps|settings|calculator|phone|messages|photos)(?:\\s+app)?$/);
+ const app=q.match(/^(?:please\s+)?(?:open|launch|start|go to)\s+(youtube music|google maps|play store|youtube|google|whatsapp|instagram|facebook|telegram|spotify|chrome|gmail|maps|settings|calculator|phone|messages|photos)(?:\s+app)?$/);
  if(app){const name=app[1];if(name==='google')launchTarget('google');else launchTarget(name);reply('Trying to open '+name+'.',false);return true}
  if(/^(time|what time is it|show time)$/.test(q)){reply('The current time is '+new Date().toLocaleTimeString());return true}
  if(/^(date|today|what is today|what is the date|show date)$/.test(q)){reply('Today is '+new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'}));return true}
@@ -239,8 +239,8 @@ function runLocalAction(raw){
  if(/^(capabilities|show capabilities|what can you do|help)$/.test(q)){showCapabilities();return true}
  if(/^(status|system status|show status)$/.test(q)){showStatus();return true}
  if(/^(notes|open notes|show notes|take me to notes)$/.test(q)){openNotes();return true}
- if(q.startsWith('search ')){const query=raw.replace(/^search\\s+/i,'').trim();openSite('https://www.google.com/search?q='+encodeURIComponent(query));reply('Searching for '+query+'.',false);return true}
- const calcMatch=q.match(/^calculate\\s+(.+)$/);
+ if(q.startsWith('search ')){const query=raw.replace(/^search\s+/i,'').trim();openSite('https://www.google.com/search?q='+encodeURIComponent(query));reply('Searching for '+query+'.',false);return true}
+ const calcMatch=q.match(/^calculate\s+(.+)$/);
  if(calcMatch){const result=calc(calcMatch[1]);reply(result===null?'I could not calculate that expression.':'Result: '+result);return true}
  if(q==='automation'||q==='open automation'||q==='automation center'){showAutomation();return true}
  return false;
