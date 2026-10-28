@@ -274,7 +274,7 @@ function runLocalAction(raw){
  const q=String(raw||'').trim().toLowerCase().replace(/[.!?]+$/,'');
  if(!q)return false;
  // On the Android APK, ask the native bridge to launch installed apps before calling cloud AI.
- const nativeOpen=q.match(/^(?:please\\s+)?(?:open|launch|start|go to)\\s+(youtube music|google maps|play store|youtube|whatsapp|instagram|facebook|telegram|spotify|chrome|gmail|maps|settings|calculator|phone|messages|photos)(?:\\s+app)?$/);
+ const nativeOpen=q.match(/^(?:please\s+)?(?:open|launch|start|go to)\s+(youtube music|google maps|play store|youtube|whatsapp|instagram|facebook|telegram|spotify|chrome|gmail|maps|settings|calculator|phone|messages|photos)(?:\s+app)?$/);
  if(nativeOpen){
   const appName=nativeOpen[1];
   try{
