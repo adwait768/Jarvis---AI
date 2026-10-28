@@ -260,7 +260,7 @@ function runLocalAction(raw){
  }reply(ans)}function listen(){const R=window.SpeechRecognition||window.webkitSpeechRecognition;if(!R){reply('Voice recognition is not supported in this browser. Try opening this site directly in a current browser with microphone permission.');return}if(listening){recognition?.stop();return}recognition=new R();recognition.lang='en-IN';recognition.interimResults=false;recognition.continuous=false;recognition.maxAlternatives=1;listening=true;app.classList.add('listening');document.getElementById('coreState').textContent='LISTENING';system.textContent='Listening... speak now';recognition.onresult=e=>{input.value=e.results[0][0].transcript;system.textContent='Command received';send()};recognition.onerror=e=>{system.textContent='Voice error: '+e.error;if(e.error==='not-allowed')toast('Microphone permission is required')};recognition.onend=()=>{listening=false;app.classList.remove('listening');document.getElementById('coreState').textContent='READY';if(system.textContent==='Listening... speak now')system.textContent='768 AI ready'};try{recognition.start()}catch(e){listening=false}}function focusInput(){input.focus()}function launchTarget(name){
  const targets={
   youtube:{pkg:'com.google.android.youtube',url:'https://www.youtube.com'},
-  google:{pkg:'com.google.android.googlequicksearchbox',url:'https://www.google.com'},
+  google:{pkg:'com.google.android.googlequicksearchbox',url:'https://www.google.com/search'},
   maps:{pkg:'com.google.android.apps.maps',url:'https://maps.google.com'},
   gmail:{pkg:'com.google.android.gm',url:'https://mail.google.com'},
   whatsapp:{pkg:'com.whatsapp',url:'https://wa.me/'},
@@ -282,7 +282,16 @@ function runLocalAction(raw){
   const bridge=window.JARVIS_NATIVE||window.JarvisAndroid;
   if(bridge&&typeof bridge.openApp==='function'&&bridge.openApp(name)){toast('Opening '+name+' app');return true}
  }catch(e){console.warn('Native app launch failed',e)}
- if(target.url){openSite(target.url);return true}
+ if(target.url){
+  if(name==='google'){
+   try{
+    const bridge=window.JARVIS_NATIVE||window.JarvisAndroid;
+    if(bridge&&typeof bridge.openUrl==='function'&&bridge.openUrl('https://www.google.com/search'))return true;
+   }catch(e){console.warn('Native Google URL launch failed',e)}
+   openSite('https://www.google.com/search');return true;
+  }
+  openSite(target.url);return true;
+ }
  toast('Cannot open '+name+' from this browser. Use the Android APK with app permissions.');return false;
 }
 function quickAction(action){
