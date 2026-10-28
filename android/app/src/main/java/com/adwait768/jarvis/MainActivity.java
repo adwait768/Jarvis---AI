@@ -68,6 +68,7 @@ public class MainActivity extends BridgeActivity {
             this.activity = activity;
             String[][] apps = {
                 {"youtube", "com.google.android.youtube"},
+                {"google", "com.google.android.googlequicksearchbox"},
                 {"youtube music", "com.google.android.apps.youtube.music"},
                 {"whatsapp", "com.whatsapp"},
                 {"instagram", "com.instagram.android"},
