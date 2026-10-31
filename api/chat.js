@@ -164,7 +164,7 @@ export async function POST(request) {
     if (safeMemory) promptParts.push(`Saved local memories (user-controlled; use only when relevant):\n${safeMemory}`);
     if (safeHistory) promptParts.push(`Conversation so far:\n${safeHistory}`);
     promptParts.push(`Adwait's new message:\n${message}`);
-    const prompt = promptParts.join("\\n\\n");
+    const prompt = promptParts.join("\n\n");
 
     const reply = await callGemini(prompt);
     return new Response(JSON.stringify({ reply }), { status: 200, headers });
