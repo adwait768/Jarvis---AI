@@ -365,4 +365,52 @@ function sayIntro(){reply('Welcome back, Adwait. 768 AI is online. Ask me anythi
  window.addEventListener('resize',syncKeyboard);
 })();
 </script>
+<script>
+/* 768 AI Local Memory + persistent on-device chat history */
+(function(){
+ const CHAT_KEY='768ai_chat_v1', MEMORY_KEY='768ai_memory_v1';
+ const chatBox=document.getElementById('chat');
+ if(!chatBox)return;
+ const originalAdd=window.add;
+ function readJSON(key,fallback){try{return JSON.parse(localStorage.getItem(key)||'null')??fallback}catch(e){return fallback}}
+ function memories(){const m=readJSON(MEMORY_KEY,[]);return Array.isArray(m)?m.filter(x=>typeof x==='string').slice(0,100):[]}
+ function saveMemories(items){localStorage.setItem(MEMORY_KEY,JSON.stringify(items.slice(0,100)))}
+ function saveChat(){const items=[...chatBox.querySelectorAll('.msg')].slice(-150).map(el=>({html:el.innerHTML,cls:el.className}));localStorage.setItem(CHAT_KEY,JSON.stringify(items))}
+ function addLocal(who,msg){if(typeof originalAdd==='function')originalAdd(who,msg);saveChat()}
+ window.add=addLocal;
+ const saved=readJSON(CHAT_KEY,[]);
+ if(Array.isArray(saved)&&saved.length){chatBox.innerHTML='';saved.slice(-150).forEach(item=>{if(!item||typeof item.html!=='string')return;const d=document.createElement('div');d.className=item.cls==='msg user'?'msg user':'msg';d.innerHTML=item.html;chatBox.appendChild(d)});chatBox.scrollTop=chatBox.scrollHeight}
+ function renderMemory(){
+  const list=memories();
+  const rows=list.map((m,i)=>'<div style="display:flex;gap:8px;align-items:start;margin:8px 0;padding:9px;background:#171d2a;border-radius:10px"><span style="flex:1">'+(i+1)+'. '+escapeHtml(m)+'</span><button class="btn" onclick="768DeleteMemory('+i+')" aria-label="Delete memory">Delete</button></div>').join('');
+  openModal('<h2>🧠 LOCAL MEMORY</h2><p>These memories are stored only in this browser/app on this device.</p><div style="max-height:32vh;overflow:auto">'+(rows||'<p>No saved memories yet.</p>')+'</div><textarea id="memoryEditor" class="noteInput" placeholder="Add or edit memories, one per line">'+escapeHtml(list.join('\n'))+'</textarea><p class="small">Save replaces the list with the lines above. Avoid storing passwords or sensitive information.</p><button class="btn" onclick="768SaveMemory()">SAVE MEMORY</button> <button class="btn" onclick="768ClearMemory()">CLEAR ALL</button> <button class="btn" onclick="closeModal()">CLOSE</button>');
+ }
+ function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+ window.openMemory=renderMemory;
+ window['768SaveMemory']=function(){const lines=document.getElementById('memoryEditor').value.split(/\n+/).map(x=>x.trim()).filter(Boolean);saveMemories([...new Set(lines)].slice(0,100));toast('Local memory saved');renderMemory()};
+ window['768DeleteMemory']=function(i){const list=memories();list.splice(i,1);saveMemories(list);renderMemory()};
+ window['768ClearMemory']=function(){if(!confirm('Delete all saved memories from this device?'))return;saveMemories([]);renderMemory();toast('Local memory cleared')};
+ // Attach saved memories to AI requests; the memory itself never leaves the device except as context in a request to the configured AI service.
+ const nativeFetch=window.fetch.bind(window);
+ window.fetch=function(url,options){
+  try{if(options&&typeof options.body==='string'&&String(url).includes('/api/chat')){const body=JSON.parse(options.body);body.memoryContext=memories().join('\n');options={...options,body:JSON.stringify(body)}}}catch(e){}
+  return nativeFetch(url,options);
+ };
+ // "Remember that ..." is an explicit user action; "What do you remember?" lists saved facts.
+ const previousSend=window.send;
+ if(typeof previousSend==='function'){
+  window.send=async function(){
+   const text=(document.getElementById('input')?.value||'').trim();
+   const remember=text.match(/^(?:please )?remember that\s+(.+)$/i);
+   if(remember){addLocal('You',text);const list=memories();list.push(remember[1].trim());saveMemories([...new Set(list)].slice(0,100));document.getElementById('input').value='';reply('I saved that in local memory on this device.');return}
+   if(/^(?:what do you remember|show my memories|open memory)$/i.test(text)){document.getElementById('input').value='';renderMemory();return}
+   return previousSend.apply(this,arguments);
+  };
+ }
+ // Add a visible memory control without changing the existing layout.
+ const actions=document.getElementById('quickActions');
+ if(actions&&!actions.querySelector('[data-action="memory"]')){const b=document.createElement('button');b.type='button';b.className='btn';b.textContent='🧠 Memory';b.setAttribute('data-action','memory');actions.appendChild(b)}
+ document.addEventListener('click',e=>{const b=e.target.closest('[data-action="memory"]');if(b){e.preventDefault();renderMemory()}});
+})();
+</script>
 </body></html>
