@@ -333,11 +333,13 @@ function sayIntro(){reply('Welcome back, Adwait. 768 AI is online. Your command 
  const memories=()=>{const x=read(MEMORY,[]);return Array.isArray(x)?x.filter(v=>typeof v==='string').slice(-80):[]};
  const saveMemories=x=>localStorage.setItem(MEMORY,JSON.stringify([...new Set(x)].slice(-80)));
  const cleanMessages=()=>[...box.querySelectorAll('.msg')].map(n=>({who:n.classList.contains('user')?'You':'768 AI',text:n.innerText.replace(/^(You|768 AI):\s*/,'').trim()})).filter(x=>x.text);
- const archive=()=>{const msgs=cleanMessages();if(!msgs.length)return;const all=read(ARCHIVE,[]);all.unshift({id:Date.now(),date:new Date().toISOString(),messages:msgs});localStorage.setItem(ARCHIVE,JSON.stringify(all.slice(0,50)))};
+ const archiveItems=msgs=>{if(!Array.isArray(msgs)||!msgs.length)return;const all=read(ARCHIVE,[]);all.unshift({id:Date.now(),date:new Date().toISOString(),messages:msgs});localStorage.setItem(ARCHIVE,JSON.stringify(all.slice(0,50)))};
+ const archive=()=>archiveItems(cleanMessages());
  const saveActive=()=>localStorage.setItem(ACTIVE,JSON.stringify(cleanMessages()));
  window.add=function(who,msg){if(typeof originalAdd==='function')originalAdd(who,msg);saveActive()};
- // Every app launch starts with an empty conversation; the previous one remains in History.
- archive();localStorage.removeItem(ACTIVE);box.innerHTML='';
+ // Archive the last active conversation, then begin a genuinely empty new chat.
+ const previous=read(ACTIVE,[]);if(Array.isArray(previous)&&previous.length)archiveItems(previous);
+ localStorage.removeItem(ACTIVE);box.innerHTML='';
  const autoRemember=text=>{
   const s=String(text||'').trim();
   const explicit=s.match(/^(?:please )?remember that\s+(.+)$/i);
