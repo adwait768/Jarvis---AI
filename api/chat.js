@@ -159,7 +159,7 @@ export async function POST(request) {
       .map(item => `${item.role === "user" ? "Adwait" : "JARVIS"}: ${item.text.slice(0, 2000)}`)
       .join("\n");
 
-    const safeMemory = memoryContext.replace(/[\\u0000-\\u001f]/g, " ").trim();
+    const safeMemory = memoryContext.replace(/[\u0000-\u001f]/g, " ").trim();
     const promptParts = [];
     if (safeMemory) promptParts.push(`Saved local memories (user-controlled; use only when relevant):\n${safeMemory}`);
     if (safeHistory) promptParts.push(`Conversation so far:\n${safeHistory}`);
