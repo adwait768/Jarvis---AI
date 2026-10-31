@@ -371,4 +371,34 @@ function sayIntro(){reply('Welcome back, Adwait. 768 AI is online. Your command 
  window.addEventListener('pagehide',saveActive);
 })();
 </script>
+<script>
+/* 768 AI chart renderer and Indian currency defaults */
+(function(){
+ const nativeFetch=window.fetch.bind(window);
+ window.fetch=async function(url,options){
+  const response=await nativeFetch(url,options);
+  try{const payload=await response.clone().json();if(payload&&payload.chart)window.__768PendingChart=payload.chart;}catch(e){}
+  return response;
+ };
+ const oldReply=window.reply;
+ function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+ function money(v){return new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(v)}
+ function drawChart(chart){
+  if(!chart||!Array.isArray(chart.labels)||!Array.isArray(chart.values)||chart.labels.length!==chart.values.length)return;
+  const max=Math.max(1,...chart.values.map(Number));
+  const rows=chart.labels.map((label,i)=>{
+   const value=Number(chart.values[i]),width=Math.max(1,value/max*100);
+   return '<div style="margin:12px 0"><div style="display:flex;justify-content:space-between;gap:8px;font-size:12px;margin-bottom:5px"><span>'+esc(label)+'</span><b>'+((chart.unit==='INR')?money(value):new Intl.NumberFormat('en-IN').format(value))+'</b></div><div style="height:13px;background:#283149;border-radius:8px;overflow:hidden"><div style="height:100%;width:'+width+'%;background:linear-gradient(90deg,#6e9cff,#67e4ed);border-radius:8px"></div></div></div>';
+  }).join('');
+  const d=document.createElement('div');d.className='msg';d.innerHTML='<b>📊 '+esc(chart.title||'Chart')+'</b><div style="margin-top:12px">'+rows+'</div>';
+  document.getElementById('chat')?.appendChild(d);document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
+ }
+ if(typeof oldReply==='function')window.reply=function(text,...args){oldReply.call(this,text,...args);const chart=window.__768PendingChart;window.__768PendingChart=null;if(chart)drawChart(chart)};
+ // Normalize visible dollar-style currency output in ordinary AI replies only when it looks like a currency amount.
+ if(typeof oldReply==='function'&&!window.__768ReplyCurrencyWrapped){
+  const wrapped=window.reply;window.reply=function(text,...args){let t=String(text);t=t.replace(/\$\s?(\d[\d,]*(?:\.\d{1,2})?)/g,'₹$1');return wrapped.call(this,t,...args)};
+  window.__768ReplyCurrencyWrapped=true;
+ }
+})();
+</script>
 </body></html>
