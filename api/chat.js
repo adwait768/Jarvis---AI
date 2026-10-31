@@ -144,6 +144,7 @@ export async function POST(request) {
     const body = await request.json();
     const message = typeof body?.message === "string" ? body.message.trim() : "";
     const history = Array.isArray(body?.history) ? body.history : [];
+    const memoryContext = typeof body?.memoryContext === "string" ? body.memoryContext.slice(0, 5000) : "";
 
     if (!message) {
       return new Response(JSON.stringify({ error: "Message is required." }), { status: 400, headers });
@@ -158,9 +159,12 @@ export async function POST(request) {
       .map(item => `${item.role === "user" ? "Adwait" : "JARVIS"}: ${item.text.slice(0, 2000)}`)
       .join("\n");
 
-    const prompt = safeHistory
-      ? `Conversation so far:\n${safeHistory}\n\nAdwait's new message:\n${message}`
-      : message;
+    const safeMemory = memoryContext.replace(/[\\u0000-\\u001f]/g, " ").trim();
+    const promptParts = [];
+    if (safeMemory) promptParts.push(`Saved local memories (user-controlled; use only when relevant):\n${safeMemory}`);
+    if (safeHistory) promptParts.push(`Conversation so far:\n${safeHistory}`);
+    promptParts.push(`Adwait's new message:\n${message}`);
+    const prompt = promptParts.join("\\n\\n");
 
     const reply = await callGemini(prompt);
     return new Response(JSON.stringify({ reply }), { status: 200, headers });
