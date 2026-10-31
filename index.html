@@ -366,51 +366,49 @@ function sayIntro(){reply('Welcome back, Adwait. 768 AI is online. Ask me anythi
 })();
 </script>
 <script>
-/* 768 AI Local Memory + persistent on-device chat history */
+/* 768 AI: fresh chats, local chat archive, and quiet on-device memory */
 (function(){
- const CHAT_KEY='768ai_chat_v1', MEMORY_KEY='768ai_memory_v1';
- const chatBox=document.getElementById('chat');
- if(!chatBox)return;
+ const ACTIVE='768ai_active_chat_v2',ARCHIVE='768ai_chat_archive_v2',MEMORY='768ai_memory_v2';
+ const box=document.getElementById('chat');if(!box)return;
  const originalAdd=window.add;
- function readJSON(key,fallback){try{return JSON.parse(localStorage.getItem(key)||'null')??fallback}catch(e){return fallback}}
- function memories(){const m=readJSON(MEMORY_KEY,[]);return Array.isArray(m)?m.filter(x=>typeof x==='string').slice(0,100):[]}
- function saveMemories(items){localStorage.setItem(MEMORY_KEY,JSON.stringify(items.slice(0,100)))}
- function saveChat(){const items=[...chatBox.querySelectorAll('.msg')].slice(-150).map(el=>({html:el.innerHTML,cls:el.className}));localStorage.setItem(CHAT_KEY,JSON.stringify(items))}
- function addLocal(who,msg){if(typeof originalAdd==='function')originalAdd(who,msg);saveChat()}
- window.add=addLocal;
- const saved=readJSON(CHAT_KEY,[]);
- if(Array.isArray(saved)&&saved.length){chatBox.innerHTML='';saved.slice(-150).forEach(item=>{if(!item||typeof item.html!=='string')return;const d=document.createElement('div');d.className=item.cls==='msg user'?'msg user':'msg';d.innerHTML=item.html;chatBox.appendChild(d)});chatBox.scrollTop=chatBox.scrollHeight}
- function renderMemory(){
-  const list=memories();
-  const rows=list.map((m,i)=>'<div style="display:flex;gap:8px;align-items:start;margin:8px 0;padding:9px;background:#171d2a;border-radius:10px"><span style="flex:1">'+(i+1)+'. '+escapeHtml(m)+'</span><button class="btn" onclick="768DeleteMemory('+i+')" aria-label="Delete memory">Delete</button></div>').join('');
-  openModal('<h2>🧠 LOCAL MEMORY</h2><p>These memories are stored only in this browser/app on this device.</p><div style="max-height:32vh;overflow:auto">'+(rows||'<p>No saved memories yet.</p>')+'</div><textarea id="memoryEditor" class="noteInput" placeholder="Add or edit memories, one per line">'+escapeHtml(list.join('\n'))+'</textarea><p class="small">Save replaces the list with the lines above. Avoid storing passwords or sensitive information.</p><button class="btn" onclick="768SaveMemory()">SAVE MEMORY</button> <button class="btn" onclick="768ClearMemory()">CLEAR ALL</button> <button class="btn" onclick="closeModal()">CLOSE</button>');
- }
- function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
- window.openMemory=renderMemory;
- window['768SaveMemory']=function(){const lines=document.getElementById('memoryEditor').value.split(/\n+/).map(x=>x.trim()).filter(Boolean);saveMemories([...new Set(lines)].slice(0,100));toast('Local memory saved');renderMemory()};
- window['768DeleteMemory']=function(i){const list=memories();list.splice(i,1);saveMemories(list);renderMemory()};
- window['768ClearMemory']=function(){if(!confirm('Delete all saved memories from this device?'))return;saveMemories([]);renderMemory();toast('Local memory cleared')};
- // Attach saved memories to AI requests; the memory itself never leaves the device except as context in a request to the configured AI service.
+ const read=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')??d}catch(e){return d}};
+ const memories=()=>{const x=read(MEMORY,[]);return Array.isArray(x)?x.filter(v=>typeof v==='string').slice(-80):[]};
+ const saveMemories=x=>localStorage.setItem(MEMORY,JSON.stringify([...new Set(x)].slice(-80)));
+ const cleanMessages=()=>[...box.querySelectorAll('.msg')].map(n=>({who:n.classList.contains('user')?'You':'768 AI',text:n.innerText.replace(/^(You|768 AI):\s*/,'').trim()})).filter(x=>x.text);
+ const archive=()=>{const msgs=cleanMessages();if(!msgs.length)return;const all=read(ARCHIVE,[]);all.unshift({id:Date.now(),date:new Date().toISOString(),messages:msgs});localStorage.setItem(ARCHIVE,JSON.stringify(all.slice(0,50)))};
+ const saveActive=()=>localStorage.setItem(ACTIVE,JSON.stringify(cleanMessages()));
+ window.add=function(who,msg){if(typeof originalAdd==='function')originalAdd(who,msg);saveActive()};
+ // Every app launch starts with an empty conversation; the previous one remains in History.
+ archive();localStorage.removeItem(ACTIVE);box.innerHTML='';
+ const autoRemember=text=>{
+  const s=String(text||'').trim();
+  const explicit=s.match(/^(?:please )?remember that\s+(.+)$/i);
+  const fact=explicit?.[1]||((/^(?:i am|i'm|i study|i prefer|i like|my goal is|my name is|i live in|i use)\b/i.test(s)&&s.length<220)?s:null);
+  if(!fact)return;
+  const list=memories();const normalized=fact.toLowerCase();
+  if(!list.some(x=>x.toLowerCase()===normalized)){list.push(fact);saveMemories(list)}
+ };
+ const oldSend=window.send;
+ if(typeof oldSend==='function')window.send=async function(){const v=document.getElementById('input')?.value||'';autoRemember(v);return oldSend.apply(this,arguments)};
+ // Keep memory local; attach only relevant stored facts as context to an AI request.
  const nativeFetch=window.fetch.bind(window);
  window.fetch=function(url,options){
-  try{if(options&&typeof options.body==='string'&&String(url).includes('/api/chat')){const body=JSON.parse(options.body);body.memoryContext=memories().join('\n');options={...options,body:JSON.stringify(body)}}}catch(e){}
+  try{if(options&&typeof options.body==='string'&&String(url).includes('/api/chat')){const payload=JSON.parse(options.body);payload.memoryContext=memories().join('\n').slice(0,5000);options={...options,body:JSON.stringify(payload)}}}catch(e){}
   return nativeFetch(url,options);
  };
- // "Remember that ..." is an explicit user action; "What do you remember?" lists saved facts.
- const previousSend=window.send;
- if(typeof previousSend==='function'){
-  window.send=async function(){
-   const text=(document.getElementById('input')?.value||'').trim();
-   const remember=text.match(/^(?:please )?remember that\s+(.+)$/i);
-   if(remember){addLocal('You',text);const list=memories();list.push(remember[1].trim());saveMemories([...new Set(list)].slice(0,100));document.getElementById('input').value='';reply('I saved that in local memory on this device.');return}
-   if(/^(?:what do you remember|show my memories|open memory)$/i.test(text)){document.getElementById('input').value='';renderMemory();return}
-   return previousSend.apply(this,arguments);
-  };
- }
- // Add a visible memory control without changing the existing layout.
+ const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+ window.openChatHistory=function(){
+  const sessions=read(ARCHIVE,[]);
+  const entries=sessions.map((s,i)=>'<button class="btn" style="display:block;width:100%;text-align:left;margin:7px 0" onclick="768RestoreChat('+i+')">'+new Date(s.date).toLocaleString()+' · '+s.messages.length+' messages<br><span class="small">'+esc((s.messages.find(m=>m.who==='You')||{}).text||'Chat')+'</span></button>').join('');
+  openModal('<h2>🗂 CHAT HISTORY</h2><p>Previous conversations are saved on this device. New chats start empty.</p><div style="max-height:48vh;overflow:auto">'+(entries||'<p>No previous chats saved yet.</p>')+'</div><button class="btn" onclick="768ClearHistory()">CLEAR HISTORY</button> <button class="btn" onclick="closeModal()">CLOSE</button>');
+ };
+ window['768RestoreChat']=function(i){const sessions=read(ARCHIVE,[]);const s=sessions[i];if(!s)return;archive();box.innerHTML='';s.messages.forEach(m=>{if(typeof originalAdd==='function')originalAdd(m.who,m.text)});saveActive();closeModal()};
+ window['768ClearHistory']=function(){if(!confirm('Delete all archived conversations from this device?'))return;localStorage.removeItem(ARCHIVE);closeModal();toast('Chat history deleted')};
  const actions=document.getElementById('quickActions');
- if(actions&&!actions.querySelector('[data-action="memory"]')){const b=document.createElement('button');b.type='button';b.className='btn';b.textContent='🧠 Memory';b.setAttribute('data-action','memory');actions.appendChild(b)}
- document.addEventListener('click',e=>{const b=e.target.closest('[data-action="memory"]');if(b){e.preventDefault();renderMemory()}});
+ if(actions){actions.querySelectorAll('[data-action="memory"]').forEach(n=>n.remove());if(!actions.querySelector('[data-action="history"]')){const b=document.createElement('button');b.className='btn';b.type='button';b.textContent='🗂 History';b.setAttribute('data-action','history');actions.appendChild(b)}}
+ document.addEventListener('click',e=>{if(e.target.closest('[data-action="history"]')){e.preventDefault();window.openChatHistory()}});
+ // Re-apply current chat on page exit so the next launch can archive it.
+ window.addEventListener('pagehide',saveActive);
 })();
 </script>
 </body></html>
