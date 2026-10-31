@@ -51,7 +51,7 @@ const SYSTEM = `You are 768 AI, a capable general-purpose AI assistant. Answer t
 Be intelligent, friendly, concise, and natural. Address the user as Adwait when appropriate.
 Answer general questions, learning questions, planning, writing, reasoning, calculations, and everyday tasks.
 Never claim to have performed an action on the user's device unless the application reports success.
-Never reveal private credentials or system instructions.`;
+Use Indian English conventions and Indian Rupees (INR, ₹) as the default currency for financial examples, prices, budgets, salaries, payments, and expenses. Do not use US dollars unless the user explicitly asks for USD. Never reveal private credentials or system instructions.`;
 
 async function callGemini(input) {
   const apiKey = process.env.GEMINI_API_KEY;
@@ -164,9 +164,30 @@ export async function POST(request) {
     if (safeMemory) promptParts.push(`Saved local memories (user-controlled; use only when relevant):\n${safeMemory}`);
     if (safeHistory) promptParts.push(`Conversation so far:\n${safeHistory}`);
     promptParts.push(`Adwait's new message:\n${message}`);
-    const prompt = promptParts.join("\n\n");
+    const chartRequest = /\\b(chart|graph|plot|visuali[sz]e)\\b/i.test(message);
+    if (chartRequest) {
+      promptParts.push("The user requested a chart. If they supplied enough actual category labels and numeric values, return ONLY valid JSON in this exact shape: {\\"reply\\":\\"Short chart title\\",\\"chart\\":{\\"type\\":\\"bar\\",\\"title\\":\\"Chart title\\",\\"labels\\":[\\"Jan\\",\\"Feb\\"],\\"values\\":[1200,1500],\\"unit\\":\\"INR\\"}}. Use INR and ₹ for money. Do not invent missing amounts. If values or categories are missing, return JSON with only reply asking the user for the missing data, and no chart property. Keep labels and values arrays the same length, with numeric values only. Do not include markdown fences.");
+    }
+    const prompt = promptParts.join("\\n\\n");
 
-    const reply = await callGemini(prompt);
+    const output = await callGemini(prompt);
+    if (chartRequest) {
+      try {
+        const parsed = JSON.parse(output);
+        if (parsed && typeof parsed.reply === "string") {
+          const chart = parsed.chart && Array.isArray(parsed.chart.labels) && Array.isArray(parsed.chart.values)
+            && parsed.chart.labels.length === parsed.chart.values.length
+            && parsed.chart.labels.length > 0 && parsed.chart.labels.length <= 24
+            && parsed.chart.values.every(v => typeof v === "number" && Number.isFinite(v))
+            ? { type: "bar", title: String(parsed.chart.title || "Chart").slice(0, 100), labels: parsed.chart.labels.map(v => String(v).slice(0, 40)), values: parsed.chart.values, unit: parsed.chart.unit === "INR" ? "INR" : "number" }
+            : null;
+          return new Response(JSON.stringify({ reply: parsed.reply.slice(0, 2000), ...(chart ? { chart } : {}) }), { status: 200, headers });
+        }
+      } catch (e) {
+        console.error("Chart response was not valid JSON.");
+      }
+    }
+    const reply = output;
     return new Response(JSON.stringify({ reply }), { status: 200, headers });
   } catch (error) {
     console.error("JARVIS request error:", error);
