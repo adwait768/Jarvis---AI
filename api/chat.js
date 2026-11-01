@@ -197,3 +197,46 @@ export async function POST(request) {
     });
   }
 }
+
+
+// Vercel Node.js entry point. Keep the Request/Response handlers above,
+// and expose a default handler so the /api/chat function can be invoked.
+export default async function handler(req, res) {
+  try {
+    const method = String(req.method || "GET").toUpperCase();
+    const headers = new Headers();
+    for (const [key, value] of Object.entries(req.headers || {})) {
+      if (Array.isArray(value)) headers.set(key, value.join(", "));
+      else if (value != null) headers.set(key, String(value));
+    }
+
+    const init = { method, headers };
+    if (method !== "GET" && method !== "HEAD" && method !== "OPTIONS") {
+      const body = req.body;
+      init.body = typeof body === "string" ? body : JSON.stringify(body ?? {});
+    }
+
+    const host = req.headers?.host || "localhost";
+    const url = new URL(req.url || "/api/chat", `https://${host}`);
+    const request = new Request(url, init);
+    const response = method === "OPTIONS"
+      ? await OPTIONS(request)
+      : method === "GET"
+        ? await GET(request)
+        : method === "POST"
+          ? await POST(request)
+          : new Response(JSON.stringify({ error: "Method not allowed." }), {
+              status: 405,
+              headers: responseHeaders(request.headers.get("origin") || "")
+            });
+
+    res.statusCode = response.status;
+    response.headers.forEach((value, key) => res.setHeader(key, value));
+    res.end(await response.text());
+  } catch (error) {
+    console.error("JARVIS function entry error:", error);
+    res.statusCode = 500;
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+    res.end(JSON.stringify({ error: "JARVIS is temporarily unavailable.", code: "AI_REQUEST_FAILED" }));
+  }
+}
