@@ -166,7 +166,7 @@ export async function POST(request) {
     promptParts.push(`Adwait's new message:\n${message}`);
     const chartRequest = /\b(chart|graph|plot|visuali[sz]e)\b/i.test(message);
     if (chartRequest) {
-      promptParts.push("The user requested a chart. If they supplied enough actual category labels and numeric values, return ONLY valid JSON in this exact shape: {\\"reply\\":\\"Short chart title\\",\\"chart\\":{\\"type\\":\\"bar\\",\\"title\\":\\"Chart title\\",\\"labels\\":[\\"Jan\\",\\"Feb\\"],\\"values\\":[1200,1500],\\"unit\\":\\"INR\\"}}. Use INR and ₹ for money. Do not invent missing amounts. If values or categories are missing, return JSON with only reply asking the user for the missing data, and no chart property. Keep labels and values arrays the same length, with numeric values only. Do not include markdown fences.");
+      promptParts.push('The user requested a chart. If they supplied enough actual category labels and numeric values, return ONLY valid JSON in this exact shape: {"reply":"Short chart title","chart":{"type":"bar","title":"Chart title","labels":["Jan","Feb"],"values":[1200,1500],"unit":"INR"}}. Use INR and ₹ for money. Do not invent missing amounts. If values or categories are missing, return JSON with only reply asking the user for the missing data, and no chart property. Keep labels and values arrays the same length, with numeric values only. Do not include markdown fences.');
     }
     const prompt = promptParts.join("\n\n");
 
