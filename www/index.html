@@ -404,7 +404,7 @@ function sayIntro(){reply('Welcome back, Adwait. 768 AI is online. Your command 
  const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
  window.openChatHistory=function(){
   const sessions=read(ARCHIVE,[]);
-  const entries=sessions.map((s,i)=>'<button class="btn" style="display:block;width:100%;text-align:left;margin:7px 0" onclick="768RestoreChat('+i+')">'+new Date(s.date).toLocaleString()+' · '+s.messages.length+' messages<br><span class="small">'+esc((s.messages.find(m=>m.who==='You')||{}).text||'Chat')+'</span></button>').join('');
+  const entries=sessions.map((s,i)=>'<button class="btn" style="display:block;width:100%;text-align:left;margin:7px 0" onclick="window['768RestoreChat']('+i+')">'+new Date(s.date).toLocaleString()+' · '+s.messages.length+' messages<br><span class="small">'+esc((s.messages.find(m=>m.who==='You')||{}).text||'Chat')+'</span></button>').join('');
   openModal('<h2>🗂 CHAT HISTORY</h2><p>Previous conversations are saved on this device. New chats start empty.</p><div style="max-height:48vh;overflow:auto">'+(entries||'<p>No previous chats saved yet.</p>')+'</div><button class="btn" onclick="768ClearHistory()">CLEAR HISTORY</button> <button class="btn" onclick="closeModal()">CLOSE</button>');
  };
  window['768RestoreChat']=function(i){const sessions=read(ARCHIVE,[]);const s=sessions[i];if(!s)return;archive();box.innerHTML='';s.messages.forEach(m=>{if(typeof originalAdd==='function')originalAdd(m.who,m.text)});saveActive();closeModal()};
