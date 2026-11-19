@@ -236,6 +236,22 @@ export async function POST(request) {
     return new Response(JSON.stringify({ reply, sources: generated.sources }), { status: 200, headers });
   } catch (error) {
     console.error("JARVIS request error:", error);
+    if (error instanceof GeminiProviderError && (error.status === 429 || error.status === 503)) {
+      const status = error.status === 429 ? 429 : 503;
+      const message = status === 429
+        ? "Gemini quota is temporarily exhausted on both configured models. Please wait for the quota window to reset, then try again."
+        : "Gemini is temporarily unavailable on both configured models. Please try again shortly.";
+      if (error.retryAfter) {
+        const seconds = /^\\d+$/.test(error.retryAfter)
+          ? Number(error.retryAfter)
+          : Math.ceil(parseFloat(error.retryAfter) || 0);
+        if (seconds > 0 && seconds <= 86400) headers["Retry-After"] = String(seconds);
+      }
+      return new Response(JSON.stringify({
+        error: message,
+        code: status === 429 ? "GEMINI_QUOTA_EXHAUSTED" : "GEMINI_TEMPORARILY_UNAVAILABLE"
+      }), { status, headers });
+    }
     return new Response(JSON.stringify({ error: "JARVIS is temporarily unavailable.", code: "AI_REQUEST_FAILED" }), {
       status: 500,
       headers
