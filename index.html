@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#020812"><title>768 AI • 768 Community</title><style>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#020812"><title>768 AI • 768 Community</title><style>
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#01060d;color:#dffbff;font-family:Arial,Helvetica,sans-serif}body{overflow-x:hidden;background:radial-gradient(circle at 50% 35%,#063247 0,#020a12 30%,#01060d 70%)}button,input{font:inherit}.app{max-width:1450px;margin:auto;padding:14px}.top{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;border-bottom:1px solid #15546b;padding:8px 4px 14px}.brand h1{margin:0;font-size:clamp(28px,4vw,50px);letter-spacing:8px;color:#8cefff;text-shadow:0 0 18px #00dfff}.brand p,.ownerTop{margin:2px 0;color:#72d9ec;letter-spacing:2px;font-size:12px}.ownerTop{text-align:center;font-size:15px}.clock{text-align:right}.clock b{display:block;font-size:22px;color:#fff}.online{color:#63ff88;font-size:12px}.layout{display:grid;grid-template-columns:220px 1fr 260px;gap:14px;margin-top:14px}.panel{background:linear-gradient(145deg,rgba(5,24,34,.95),rgba(2,10,17,.96));border:1px solid #12607a;border-radius:14px;box-shadow:0 0 25px #001722,inset 0 0 25px rgba(0,210,255,.04);padding:14px}.nav button,.quickGrid button{width:100%;margin:5px 0;text-align:left;background:#061925;color:#9cefff;border:1px solid #15566d;border-radius:9px;padding:11px;cursor:pointer}.nav button:hover,.quickGrid button:hover{background:#0b3041;box-shadow:0 0 12px #007b9e}.nav b,.sideTitle{display:block;color:#6de7ff;letter-spacing:2px;margin-bottom:8px}.ok{color:#62ff83}.quote{font-style:italic;color:#a8dce5;line-height:1.5;margin-top:14px}.features{font-size:13px;line-height:1.9}.features div:before{content:'✓';color:#57ff7b;margin-right:7px}.center{display:flex;flex-direction:column;min-width:0}.reactor{height:390px;display:grid;place-items:center;position:relative}.core{width:125px;height:125px;border-radius:50%;display:grid;place-items:center;text-align:center;background:radial-gradient(circle,#fff 0 5%,#9af8ff 17%,#159ab5 42%,#003d54 58%,transparent 72%);box-shadow:0 0 30px #18eaff,0 0 100px #007c9e;animation:pulse 2s infinite;z-index:3}.core span{font-weight:bold;letter-spacing:3px;color:#002632}.core small{display:block;letter-spacing:1px}.ring{position:absolute;border:2px solid #1edfff;border-radius:50%;opacity:.65;box-shadow:0 0 12px #00bde0}.r1{width:175px;height:175px;animation:spin 8s linear infinite}.r2{width:245px;height:245px;animation:spin 13s linear reverse infinite}.r3{width:315px;height:315px;animation:spin 19s linear infinite}.r4{width:365px;height:365px;border-style:dashed;animation:spin 27s linear reverse infinite}.chat{height:270px;overflow:auto;padding:4px}.msg{margin:8px 0;padding:10px 12px;border-radius:10px;background:#061b25;border-left:3px solid #1b91aa;white-space:pre-wrap;line-height:1.45}.msg.user{border-left-color:#66edff}.msg b{color:#72eaff}.controls{display:flex;gap:8px;margin-top:10px}.controls input{flex:1;min-width:0;background:#020a10;color:#fff;border:1px solid #17627b;border-radius:10px;padding:13px}.btn{background:#08232e;color:#b8f7ff;border:1px solid #1b7189;border-radius:9px;padding:10px 14px;cursor:pointer}.btn:hover{background:#0b3041}.mic{width:54px;font-size:20px;text-align:center}.listening .mic{animation:glow .8s infinite}.quickGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px}.quickGrid button{margin:0;text-align:center}.system{text-align:center;color:#76cfdf;font-size:12px;padding-top:10px}.footer{margin-top:14px;text-align:center;border-top:1px solid #15546b;padding:18px 8px;color:#61cfe3;letter-spacing:2px}.footer strong{display:block;color:#dffcff;font-size:16px;margin-bottom:5px}.footer small{letter-spacing:1px;color:#5799a7}.toast{position:fixed;left:50%;bottom:25px;transform:translateX(-50%);background:#062432;border:1px solid #23cfea;padding:11px 16px;border-radius:9px;box-shadow:0 0 20px #00738d;display:none;z-index:20}.modal{display:none;position:fixed;inset:0;background:rgba(0,5,10,.82);z-index:10;align-items:center;justify-content:center;padding:15px}.modalBox{max-width:600px;width:100%;max-height:80vh;overflow:auto}.noteInput{width:100%;min-height:130px;background:#020a10;color:#fff;border:1px solid #17627b;border-radius:9px;padding:12px}.timer{font-size:25px;text-align:center;color:#75efff;margin:10px}.small{font-size:11px;color:#6ca9b5}
 /* HIGH-TECH 768 AI HUD REDESIGN — visual only */
 body{background:#02060d;background-image:radial-gradient(circle at 50% 22%,rgba(0,174,255,.14),transparent 30%),linear-gradient(rgba(0,190,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,190,255,.025) 1px,transparent 1px);background-size:auto,32px 32px,32px 32px}
@@ -147,49 +147,6 @@ body{overscroll-behavior-y:contain}
 }
 @media(prefers-reduced-motion:reduce){.chat{scroll-behavior:auto}}
 
-/* Fluid spectral search state; idle interface remains true black */
-html,body{background:#000!important}
-body{background-image:none!important;color:#eef3ff}
-.searching{--flow-a:#ff3cac;--flow-b:#784bff;--flow-c:#00d5ff;--flow-d:#ff9a3d}
-.searching .reactor{background:radial-gradient(circle at 50% 50%,rgba(74,35,145,.18),transparent 53%),#000;border-color:rgba(143,105,255,.32);overflow:hidden}
-.searching .reactor:before{inset:10%;border:1px solid rgba(255,255,255,.1);border-radius:50%;animation:fluidOrbit 7s linear infinite}
-.searching .reactor:after{inset:17%;border:1px dashed rgba(0,220,255,.28);border-radius:50%;transform:none;animation:fluidOrbit 12s linear infinite reverse}
-.searching .ring{border:2px solid transparent;background:linear-gradient(#000,#000) padding-box,conic-gradient(from 0deg,var(--flow-a),var(--flow-b),var(--flow-c),var(--flow-d),var(--flow-a)) border-box;opacity:.95;filter:drop-shadow(0 0 9px rgba(115,92,255,.7));animation:fluidOrbit 5s linear infinite}
-.searching .r1{animation-duration:4s}.searching .r2{animation-duration:7s;animation-direction:reverse}.searching .r3{animation-duration:10s}.searching .r4{animation-duration:14s;animation-direction:reverse}
-.searching .core{background:radial-gradient(circle at 35% 28%,#fff 0 4%,#ffb6ef 10%,#ff3cac 20%,#784bff 43%,#00d5ff 61%,transparent 75%);box-shadow:0 0 28px #ff3cac,0 0 65px #784bff,0 0 120px rgba(0,213,255,.55);animation:fluidCore 2.2s ease-in-out infinite alternate}
-.searching .core span{color:#fff;text-shadow:0 0 9px #fff,0 0 22px #ff3cac}
-.searching .panel{border-color:rgba(137,107,255,.22)}
-.searching .system{color:#d7aaff;text-shadow:0 0 12px rgba(153,91,255,.55)}
-@keyframes fluidOrbit{to{transform:rotate(360deg)}}
-@keyframes fluidCore{from{transform:scale(.94);filter:hue-rotate(0deg) brightness(1)}to{transform:scale(1.09);filter:hue-rotate(35deg) brightness(1.3)}}
-@media(prefers-reduced-motion:reduce){.searching .ring,.searching .reactor:before,.searching .reactor:after,.searching .core{animation:none!important}}
-
-
-/* MOBILE-FIRST SEARCH STATE: black idle screen + fluid edge light */
-html,body{background:#000!important}
-body{background-image:none!important}
-body.searching{background:#000!important}
-body.searching:before{
- content:"";position:fixed;inset:0;z-index:999;pointer-events:none;
- padding:3px;border-radius:0;
- background:conic-gradient(from var(--edge-angle,0deg),#ff2bd6,#8b5cff,#16d9ff,#40ffb2,#ffe45e,#ff713d,#ff2bd6);
- -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
- -webkit-mask-composite:xor;mask-composite:exclude;
- opacity:.95;filter:drop-shadow(0 0 7px rgba(90,110,255,.55));
- animation:edgeFlow 2.8s linear infinite;
-}
-body.searching .reactor{border-color:transparent;box-shadow:inset 0 0 55px rgba(115,50,255,.12)}
-body.searching .ring{border-color:rgba(160,110,255,.7);box-shadow:0 0 16px rgba(170,70,255,.45),0 0 38px rgba(0,210,255,.18)}
-body.searching .r1{border-top-color:#ff4bc9;border-right-color:#8a5cff}
-body.searching .r2{border-top-color:#25e3ff;border-left-color:#b65cff}
-body.searching .r3{border-top-color:#7dffbe;border-right-color:#ff8d52}
-body.searching .r4{border-top-color:#ffe45e;border-left-color:#ff55c8}
-body.searching .core{background:radial-gradient(circle,#fff 0 4%,#fff1ff 10%,#ff8de5 22%,#985dff 43%,#153d80 64%,transparent 76%);box-shadow:0 0 28px #ff55d4,0 0 65px rgba(132,65,255,.65),0 0 115px rgba(0,205,255,.3);animation:fluidCore 1.25s ease-in-out infinite}
-@keyframes edgeFlow{to{--edge-angle:360deg}}
-@property --edge-angle{syntax:"<angle>";initial-value:0deg;inherits:false}
-@keyframes fluidCore{0%,100%{transform:scale(.96);filter:hue-rotate(0deg) brightness(1)}50%{transform:scale(1.09);filter:hue-rotate(45deg) brightness(1.35)}}
-@media(max-width:620px){body.searching:before{padding:2px}.app{padding-bottom:calc(18px + env(safe-area-inset-bottom))}}
-@media(prefers-reduced-motion:reduce){body.searching:before,body.searching .core{animation:none!important}}
 
 /* Fixed-screen layout + subtle side light trails only while AI is searching */
 html,body{height:100%;min-height:0;overflow:hidden!important;overscroll-behavior:none}
@@ -217,6 +174,46 @@ body.searching .app:after{right:-64px;border-left-color:rgba(255,91,214,.72);bor
 }
 @media(prefers-reduced-motion:reduce){body.searching:after,body.searching .app:after{animation:none;opacity:.35}}
 
+/* APK fluid search border and black idle screen */
+html,body{background:#000!important}body{background-image:none!important}
+body.searching:before{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;padding:3px;background:conic-gradient(from 0deg,#ff2bd6,#8b5cff,#16d9ff,#40ffb2,#ffe45e,#ff713d,#ff2bd6);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:apkEdge 2.5s linear infinite;filter:drop-shadow(0 0 8px rgba(130,85,255,.6))}
+body.searching .core{background:radial-gradient(circle,#fff 0 4%,#fff1ff 10%,#ff8de5 22%,#985dff 43%,#153d80 64%,transparent 76%);box-shadow:0 0 28px #ff55d4,0 0 65px rgba(132,65,255,.65),0 0 115px rgba(0,205,255,.3);animation:apkCore 1.2s ease-in-out infinite}
+body.searching .ring{border-color:rgba(160,110,255,.8);box-shadow:0 0 16px rgba(170,70,255,.45),0 0 38px rgba(0,210,255,.18)}
+@keyframes apkEdge{to{filter:hue-rotate(360deg) drop-shadow(0 0 8px rgba(130,85,255,.6))}}
+@keyframes apkCore{50%{transform:scale(1.08);filter:brightness(1.35)}}
+@media(prefers-reduced-motion:reduce){body.searching:before,body.searching .core{animation:none!important}}
+
+/* Refined search state: soft light trails, floating side curves, zero page scroll */
+html,body{height:100%;min-height:0;overflow:hidden!important;overscroll-behavior:none}
+body{position:fixed;inset:0;width:100%;height:100dvh}
+#app{height:100dvh;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.layout{flex:1;min-height:0}
+.center{min-height:0}
+.center>.panel{min-height:0!important;flex:1;overflow:hidden}
+.chat{min-height:0!important;flex:1;height:auto!important}
+body.searching:before{display:none!important}
+body.searching:after{content:"";position:fixed;inset:0;z-index:5;pointer-events:none;opacity:.9;
+ background:
+ radial-gradient(ellipse 42% 65% at -12% 50%,transparent 58%,rgba(122,173,255,.42) 59%,rgba(166,206,255,.12) 60%,transparent 63%),
+ radial-gradient(ellipse 42% 65% at 112% 50%,transparent 58%,rgba(112,224,255,.42) 59%,rgba(177,226,255,.12) 60%,transparent 63%),
+ radial-gradient(ellipse 30% 58% at -10% 45%,transparent 68%,rgba(187,164,255,.36) 69%,transparent 71%),
+ radial-gradient(ellipse 30% 58% at 110% 55%,transparent 68%,rgba(148,194,255,.34) 69%,transparent 71%);
+ animation:softCurves 3.8s ease-in-out infinite alternate}
+body.searching .core{background:radial-gradient(circle,#fff 0 5%,#f4fbff 16%,#b8d9ff 35%,#6c8cff 53%,#27345a 68%,transparent 77%);box-shadow:0 0 22px rgba(164,201,255,.42),0 0 60px rgba(114,147,255,.22);animation:softCore 2s ease-in-out infinite}
+body.searching .ring{border-color:rgba(165,195,255,.55);box-shadow:0 0 13px rgba(151,187,255,.2);opacity:.7}
+@keyframes softCurves{from{transform:translateX(-5px) scale(1);opacity:.45}to{transform:translateX(5px) scale(1.025);opacity:.9}}
+@keyframes softCore{50%{transform:scale(1.045);filter:brightness(1.12)}}
+@media(max-width:700px){
+ body,#app{height:100dvh;max-height:100dvh}
+ .layout{flex:1;min-height:0}
+ .center{flex:1;min-height:0}
+ .center>.panel{flex:1;min-height:0!important}
+ .chat{flex:1;height:auto!important;min-height:0!important}
+ .nav,.right,.footer{display:none!important}
+ .reactor{flex:0 0 auto}
+}
+@media(prefers-reduced-motion:reduce){body.searching:after,body.searching .core{animation:none!important}}
+
 
 /* Mobile shortcut visibility, tap reliability, and richer dark palette */
 .quickGrid{position:relative;z-index:12;isolation:isolate;pointer-events:auto}
@@ -228,127 +225,147 @@ body.searching .app:after{right:-64px;border-left-color:rgba(255,91,214,.72);bor
 @media(max-width:700px){.quickGrid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;flex:0 0 auto!important}.quickGrid button{font-size:12px;padding:11px 5px;min-width:0}}
 @media(max-width:700px){body.keyboard-open .quickGrid{display:grid!important}}
 
-</style></head><body><div class="app" id="app"><header class="top"><div class="brand"><h1>768 AI</h1><p>PERSONAL AI • BY 768 COMMUNITY</p></div><div class="ownerTop">OWNER: <strong>ADWAIT SURYAWANSHI</strong><br><span>THINK • SPEAK • CREATE • GET IT DONE</span></div><div class="clock"><b id="clock">--:--</b><span id="today"></span><br><span class="online">● SYSTEM ONLINE</span></div></header><div class="layout"><aside class="panel nav"><b>COMMAND CENTER</b><button onclick="sayIntro()">⌂ Home</button><button onclick="focusInput()">☷ Chat</button><button onclick="listen()">🎙 Voice Control</button><button onclick="showAutomation()">⚙ Automation</button><button onclick="openSite('https://www.google.com')">⌕ Search</button><button onclick="openSite('https://www.youtube.com')">▶ Entertainment</button><button onclick="showStatus()">▣ System Info</button><button onclick="showSettings()">⚙ Settings</button></aside><section class="center"><div class="reactor" id="reactor"><div class="ring r4"></div><div class="ring r3"></div><div class="ring r2"></div><div class="ring r1"></div><div class="core"><span>768 AI<small id="coreState">READY</small></span></div></div><div class="panel"><div id="chat" class="chat"></div><div class="controls composer" role="group" aria-label="Message composer"><input id="input" autocomplete="off" autocorrect="on" spellcheck="true" autocapitalize="sentences" aria-label="Message 768 AI" placeholder="Message 768 AI..."><button class="btn mic" type="button" onclick="listen()" title="Voice input" aria-label="Start voice input">🎙</button><button class="btn sendBtn" type="button" onclick="send()" title="Send message" aria-label="Send message">↑</button></div><div class="quickGrid" id="quickActions"><button class="btn" type="button" data-action="time">🕐 Time</button><button class="btn" type="button" data-action="date">📅 Date</button><button class="btn" type="button" data-action="calculator">🧮 Calculator</button><button class="btn" type="button" data-action="capabilities">❓ Capabilities</button><button class="btn" type="button" data-action="youtube">▶ YouTube</button><button class="btn" type="button" data-action="google">G Google</button><button class="btn" type="button" data-action="notes">📝 Notes</button><button class="btn" type="button" data-action="status">▣ Status</button></div><div class="system" id="system">768 AI AI core ready • Secure Gemini backend connected through Vercel</div></div></section><aside class="panel right"><span class="sideTitle">AI CAPABILITIES</span><div class="features"><div>Real AI conversation</div><div>Voice commands</div><div>Learning help</div><div>Planning & reasoning</div><div>Web shortcuts</div><div>Calculations</div><div>Notes & memory</div><div>Timers</div><div>Personal command shortcuts</div><div>Secure server-side AI</div></div><div class="panel quote">“More than an assistant — a friend who listens, helps and gets things done.”<br><br>— 768 AI • 768 COMMUNITY</div></aside></div><footer class="footer"><strong>♛ 768 COMMUNITY • CREATED BY ADWAIT SURYAWANSHI</strong><small>768 AI • VOICE • AI • AUTOMATION • 768 COMMUNITY</small></footer></div><div class="toast" id="toast"></div><div class="modal" id="modal"><div class="modalBox panel" id="modalContent"></div></div><script>
-const OWNER='Adwait Suryawanshi';const VERCEL_API='https://jarvis-ai-swart-one.vercel.app/api/chat';const chat=document.getElementById('chat'),input=document.getElementById('input'),system=document.getElementById('system'),app=document.getElementById('app');let recognition=null,listening=false,timerHandle=null,history=[];
-function add(who,text){const d=document.createElement('div');d.className='msg '+(who==='You'?'user':'');d.innerHTML='<b>'+who+':</b> '+escapeHtml(text);chat.appendChild(d);chat.scrollTop=chat.scrollHeight}function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}function speak(t){if('speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=.94;u.pitch=.82;u.volume=1;speechSynthesis.speak(u)}}function reply(t,voice=true){add('768 AI',t);if(voice)speak(t);system.textContent='AI response complete • 768 AI ready'}function command(t){input.value=t;send()}function toast(t){const x=document.getElementById('toast');x.textContent=t;x.style.display='block';clearTimeout(x._t);x._t=setTimeout(()=>x.style.display='none',2400)}function openSite(url){
- try{
-  const parsed=new URL(url,window.location.href);
-  const isAndroid=/Android/i.test(navigator.userAgent);
-  if(isAndroid && parsed.protocol==='https:' && (parsed.hostname==='www.youtube.com'||parsed.hostname==='youtube.com')){
-   const fallback=encodeURIComponent(parsed.href);
-   window.location.href='intent://'+parsed.host+parsed.pathname+parsed.search+parsed.hash+'#Intent;scheme=https;package=com.google.android.youtube;S.browser_fallback_url='+fallback+';end';
-   toast('Opening YouTube app…');return;
-  }
-  if(isAndroid && parsed.protocol==='https:' && (parsed.hostname==='www.google.com'||parsed.hostname==='google.com')){
-   const fallback=encodeURIComponent(parsed.href);
-   window.location.href='intent://'+parsed.host+parsed.pathname+parsed.search+parsed.hash+'#Intent;scheme=https;package=com.google.android.googlequicksearchbox;S.browser_fallback_url='+fallback+';end';
-   toast('Opening Google app…');return;
-  }
-  const opened=window.open(parsed.href,'_blank');
-  if(!opened){window.location.href=parsed.href;return}
-  toast('Opening website');
- }catch(err){window.location.href=url}
-}function focusInput(){input.focus()}
-function launchTarget(name){
- const targets={
-  youtube:{url:'https://www.youtube.com',pkg:'com.google.android.youtube',web:'https://www.youtube.com'},
-  google:{url:'https://www.google.com',pkg:'com.google.android.googlequicksearchbox',web:'https://www.google.com'},
-  maps:{url:'https://maps.google.com',pkg:'com.google.android.apps.maps',web:'https://maps.google.com'},
-  gmail:{url:'https://mail.google.com',pkg:'com.google.android.gm',web:'https://mail.google.com'},
-  whatsapp:{url:'https://wa.me/',pkg:'com.whatsapp',web:'https://wa.me/'},
-  instagram:{url:'https://www.instagram.com',pkg:'com.instagram.android',web:'https://www.instagram.com'},
-  chrome:{url:'https://www.google.com',pkg:'com.android.chrome',web:'https://www.google.com'}
- };
- const t=targets[name];if(!t)return false;
- const isAndroid=/Android/i.test(navigator.userAgent);
- if(isAndroid){
-  const fallback=encodeURIComponent(t.web);
-  const intent='intent://'+t.url.replace(/^https?:\/\//,'')+'#Intent;scheme=https;package='+t.pkg+';S.browser_fallback_url='+fallback+';end';
-  try{window.location.href=intent;system.textContent='Trying to open '+name+' app…';return true}catch(e){}
- }
- const win=window.open(t.web,'_blank','noopener');
- if(!win){window.location.href=t.web}
- system.textContent='Opening '+name+'…';return true;
+.msg-content{margin-top:4px;overflow-wrap:anywhere}.msg-content p{margin:0 0 10px;line-height:1.6}.msg-content p:last-child{margin-bottom:0}.msg-content ol,.msg-content ul{margin:7px 0 12px;padding-left:25px;line-height:1.65}.msg-content li{padding-left:3px;margin:4px 0}.msg-content strong{font-weight:700;color:#f0f3ff}
+.quickToggle{display:none}
+@media(max-width:620px){
+ .quickToggle{display:flex;width:100%;align-items:center;justify-content:center;gap:9px;flex-direction:column;border:0;background:transparent;color:#91a4c4;padding:9px 12px 6px;font-size:12px;letter-spacing:.3px;touch-action:pan-y;cursor:pointer}
+ .quickHandle{display:block;width:42px;height:4px;border-radius:9px;background:#78839b;opacity:.8}.quickToggle[aria-expanded="true"] .quickHandle{width:56px;background:linear-gradient(90deg,#4b8dff,#48dfff);opacity:1;box-shadow:0 0 8px #398cff,0 0 18px rgba(57,140,255,.85)}
+ .quickGrid{display:grid;grid-template-columns:1fr 1fr;max-height:0;opacity:0;overflow:hidden;transform:translateY(14px);transition:max-height .28s ease,opacity .22s ease,transform .28s ease;pointer-events:none}
+ .quickGrid.quickExpanded{max-height:360px;opacity:1;transform:translateY(0);pointer-events:auto}
 }
+</style></head><body><div class="app" id="app"><header class="top"><div class="brand"><h1>768 AI</h1><p>PERSONAL AI • BY 768 COMMUNITY</p></div><div class="ownerTop">OWNER: <strong>ADWAIT SURYAWANSHI</strong><br><span>THINK • SPEAK • CREATE • GET IT DONE</span></div><div class="clock"><b id="clock">--:--</b><span id="today"></span><br><span class="online">● SYSTEM ONLINE</span></div></header><div class="layout"><aside class="panel nav"><b>COMMAND CENTER</b><button onclick="sayIntro()">⌂ Home</button><button onclick="focusInput()">☷ Chat</button><button onclick="listen()">🎙 Voice Control</button><button onclick="showAutomation()">⚙ Automation</button><button onclick="openSite('https://www.google.com')">⌕ Search</button><button onclick="openSite('https://www.youtube.com')">▶ Entertainment</button><button onclick="showStatus()">▣ System Info</button><button onclick="showSettings()">⚙ Settings</button></aside><section class="center"><div class="reactor" id="reactor"><div class="ring r4"></div><div class="ring r3"></div><div class="ring r2"></div><div class="ring r1"></div><div class="core"><span>768 AI<small id="coreState">READY</small></span></div></div><div class="panel"><div id="chat" class="chat"></div><div class="controls composer" role="group" aria-label="Message composer"><input id="input" autocomplete="off" autocorrect="on" spellcheck="true" autocapitalize="sentences" aria-label="Message 768 AI" placeholder="Message 768 AI..."><button class="btn mic" type="button" onclick="listen()" title="Voice input" aria-label="Start voice input">🎙</button><button class="btn sendBtn" type="button" onclick="send()" title="Send message" aria-label="Send message">↑</button></div><button class="quickToggle" id="quickToggle" type="button" aria-expanded="false" aria-controls="quickActions" onclick="toggleQuickActions()" ontouchstart="quickTouchStart(event)" ontouchend="quickTouchEnd(event)"><span class="quickHandle"></span><span id="quickToggleLabel">Swipe up for features</span></button><div class="quickGrid" id="quickActions"><button class="btn" type="button" onclick="quickAction('time')">🕐 Time</button><button class="btn" type="button" onclick="quickAction('date')">📅 Date</button><button class="btn" type="button" onclick="quickAction('calculator')">🧮 Calculator</button><button class="btn" type="button" onclick="quickAction('capabilities')">❓ Capabilities</button><button class="btn" type="button" onclick="quickAction('youtube')">▶ YouTube</button><button class="btn" type="button" onclick="quickAction('google')">G Google</button><button class="btn" type="button" onclick="quickAction('notes')">📝 Notes</button><button class="btn" type="button" onclick="quickAction('status')">▣ Status</button></div><div class="system" id="system">768 AI local core ready • Voice control available when supported by your browser</div></div></section><aside class="panel right"><span class="sideTitle">AI CAPABILITIES</span><div class="features"><div>Natural conversation</div><div>Voice commands</div><div>Web search</div><div>Website launcher</div><div>Calculations</div><div>Notes & memory</div><div>Timers & reminders</div><div>Browser automation</div><div>Personal command shortcuts</div><div>Learning-friendly local memory</div></div><div class="panel quote">“More than an assistant — a friend who listens, helps and gets things done.”<br><br>— 768 AI • 768 COMMUNITY</div></aside></div><footer class="footer"><strong>♛ 768 COMMUNITY • CREATED BY ADWAIT SURYAWANSHI</strong><small>768 AI • VOICE • AUTOMATION • 768 COMMUNITY</small></footer></div><div class="toast" id="toast"></div><div class="modal" id="modal"><div class="modalBox panel" id="modalContent"></div></div><script>
+const OWNER='Adwait Suryawanshi',chat=document.getElementById('chat'),input=document.getElementById('input'),system=document.getElementById('system'),app=document.getElementById('app');let recognition=null,listening=false,timerHandle=null;function formatMessage(text){
+ const source=String(text||'').replace(/\r\n?/g,'\n')
+  .replace(/\\\(/g,'').replace(/\\\)/g,'').replace(/\\\[/g,'').replace(/\\\]/g,'')
+  .replace(/\\times\b/g,'×').replace(/\\cdot\b/g,'·').replace(/\\div\b/g,'÷').replace(/\\pi\b/g,'π')
+  .replace(/\s+(?=\d+[.)]\s+)/g,'\n').replace(/\s+(?=[•*-]\s+)/g,'\n');
+ const lines=source.split('\n'),parts=[];let paragraph=[],listType='',listItems=[];
+ const inline=value=>{
+  let out=escapeHtml(value);
+  out=out.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/__(.+?)__/g,'<strong>$1</strong>');
+  out=out.replace(/\*{1,2}/g,'');
+  out=out.replace(/(https:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+  return out;
+ };
+ const flushParagraph=()=>{if(paragraph.length){parts.push('<p>'+paragraph.map(inline).join(' ')+'</p>');paragraph=[]}};
+ const flushList=()=>{if(listItems.length){const tag=listType==='ordered'?'ol':'ul';parts.push('<'+tag+'>'+listItems.map(item=>'<li>'+inline(item)+'</li>').join('')+'</'+tag+'>');listItems=[];listType=''}};
+ for(const line of lines){const value=line.trim();if(!value){flushParagraph();flushList();continue}
+  const numbered=value.match(/^\d+[.)]\s+(.+)$/),bulleted=value.match(/^[-*•]\s+(.+)$/);
+  if(numbered||bulleted){flushParagraph();const next=numbered?'ordered':'unordered';if(listType&&listType!==next)flushList();listType=next;listItems.push(numbered?numbered[1]:bulleted[1])}
+  else{flushList();paragraph.push(value)}
+ }
+ flushParagraph();flushList();return parts.join('')||'<p></p>';
+}
+function setQuickActionsExpanded(expanded){
+ const panel=document.getElementById('quickActions'),toggle=document.getElementById('quickToggle'),label=document.getElementById('quickToggleLabel');
+ if(!panel||!toggle)return;
+ const show=window.matchMedia('(max-width: 620px)').matches&&!!expanded;
+ panel.classList.toggle('quickExpanded',show);
+ toggle.setAttribute('aria-expanded',String(show));
+ if(label)label.textContent=show?'Swipe down to hide features':'Swipe up for features';
+}
+function toggleQuickActions(){const panel=document.getElementById('quickActions');setQuickActionsExpanded(!panel?.classList.contains('quickExpanded'))}
+let quickTouchY=0;
+function quickTouchStart(event){quickTouchY=event.changedTouches[0].clientY}
+function quickTouchEnd(event){const delta=event.changedTouches[0].clientY-quickTouchY;if(Math.abs(delta)>24)setQuickActionsExpanded(delta<0)}
+function add(who,text){const d=document.createElement('div');d.className='msg '+(who==='You'?'user':'');d.innerHTML='<b>'+who+':</b><div class="msg-content">'+formatMessage(text)+'</div>';chat.appendChild(d);chat.scrollTop=chat.scrollHeight}function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}function speak(t){if('speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=.94;u.pitch=.82;u.volume=1;speechSynthesis.speak(u)}}function reply(t){add('768 AI',t);speak(t);system.textContent='Command complete • 768 AI ready'}function command(t){input.value=t;send()}function toast(t){const x=document.getElementById('toast');x.textContent=t;x.style.display='block';clearTimeout(x._t);x._t=setTimeout(()=>x.style.display='none',2400)}function openSite(url){
+ try{
+  const parsed=new URL(url,window.location.href),isAndroid=/Android/i.test(navigator.userAgent);
+  if(isAndroid&&parsed.protocol==='https:'&&(parsed.hostname==='www.youtube.com'||parsed.hostname==='youtube.com')){
+   window.location.href='intent://'+parsed.host+parsed.pathname+parsed.search+parsed.hash+'#Intent;scheme=https;package=com.google.android.youtube;S.browser_fallback_url='+encodeURIComponent(parsed.href)+';end';
+   toast('Opening YouTube app…');return true;
+  }
+  if(isAndroid&&parsed.protocol==='https:'&&(parsed.hostname==='www.google.com'||parsed.hostname==='google.com')){
+   window.location.href='intent://'+parsed.host+parsed.pathname+parsed.search+parsed.hash+'#Intent;scheme=https;package=com.google.android.googlequicksearchbox;S.browser_fallback_url='+encodeURIComponent(parsed.href)+';end';
+   toast('Opening Google app…');return true;
+  }
+  const opened=window.open(parsed.href,'_blank','noopener');
+  if(!opened){window.location.href=parsed.href;return true}
+  toast('Opening website');return true;
+ }catch(e){window.location.href=url;return false}
+}function calc(expr){try{let s=expr.replace(/[^0-9+\-*/().%\s]/g,'');if(!s.trim())return null;return Function('"use strict";return ('+s+')')()}catch(e){return null}}function send(){const raw=input.value.trim();if(!raw)return;setQuickActionsExpanded(false);add('You',raw);input.value='';if(runLocalAction(raw))return;handle(raw)}
 function runLocalAction(raw){
  const q=String(raw||'').trim().toLowerCase().replace(/[.!?]+$/,'');
  if(!q)return false;
- // On the Android APK, ask the native bridge to launch installed apps before calling cloud AI.
- const nativeOpen=q.match(/^(?:please\s+)?(?:open|launch|start|go to)\s+(youtube music|google maps|play store|youtube|whatsapp|instagram|facebook|telegram|spotify|chrome|gmail|maps|settings|calculator|phone|messages|photos)(?:\s+app)?$/);
- if(nativeOpen){
-  const appName=nativeOpen[1];
-  try{
-   const bridge=window.JARVIS_NATIVE||window.JarvisAndroid;
-   if(bridge&&typeof bridge.openApp==='function'&&bridge.openApp(appName)){
-    reply('Opening '+appName+'.',false);system.textContent='Android app launched • 768 AI ready';return true;
-   }
-  }catch(e){console.warn('Native app launch failed:',e)}
-  // If the app is not installed, known web services can still open in a browser.
-  const webFallback={youtube:'https://www.youtube.com', 'youtube music':'https://music.youtube.com', whatsapp:'https://wa.me/', instagram:'https://www.instagram.com', facebook:'https://www.facebook.com', telegram:'https://web.telegram.org', spotify:'https://open.spotify.com', chrome:'https://www.google.com', gmail:'https://mail.google.com', maps:'https://maps.google.com', 'google maps':'https://maps.google.com'};
-  const target=webFallback[appName];
-  if(target){openSite(target);reply('Opening '+appName+'. If the app is not installed, its website will open.',false);return true}
-  reply('I could not launch '+appName+'. Check that the app is installed on this Android device.',false);return true;
- }
- if(/^(what time is it|time|show time)$/.test(q)){reply('The current time is '+new Date().toLocaleTimeString());return true}
- if(/^(what is the date|what is today|date|today|show date)$/.test(q)){reply('Today is '+new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'}));return true}
- if(/^(what can you do|capabilities|show capabilities)$/.test(q)){showCapabilities();reply('Here are my current capabilities.',false);return true}
- if(/^(system status|status|show status)$/.test(q)){showStatus();reply('System status opened.',false);return true}
- if(/^(take me to notes|open notes|show notes|notes)$/.test(q)){openNotes();reply('Your notes are open.',false);return true}
- if(/^(open calculator|calculator|calculate|launch calculator)$/.test(q)){showCalculator();reply('Calculator opened.',false);return true}
- const calc=q.match(/^calculate\s+(.+)$/);if(calc){showCalculator();const field=document.getElementById('calcExpression');if(field){field.value=calc[1];calculateExpression()}return true}
- const openMatch=q.match(/^(?:please\s+)?(?:open|launch|start|go to)\s+(youtube|google|maps|google maps|gmail|whatsapp|instagram|chrome)(?:\s+app)?$/);
- if(openMatch){
-  let name=openMatch[1].replace('google maps','maps');
-  const opened=launchTarget(name);
-  if(opened){reply('Opening '+name+'.',false);return true}
- }
- const searchMatch=String(raw).trim().match(/^(?:search|google)\s+(.+)$/i);
- if(searchMatch){const url='https://www.google.com/search?q='+encodeURIComponent(searchMatch[1]);const w=window.open(url,'_blank','noopener');if(!w)window.location.href=url;reply('Searching Google for '+searchMatch[1]+'.',false);return true}
- const timerMatch=q.match(/^(?:start )?timer(?: for)?\s+(\d+)\s*(seconds?|secs?|minutes?|mins?)$/);
- if(timerMatch){const amount=Number(timerMatch[1]);const seconds=/^s|^sec/.test(timerMatch[2])?amount:amount*60;if(amount>0&&amount<=1440){startTimer(seconds);reply('Timer started for '+amount+' '+timerMatch[2]+'.',false);return true}}
+ const app=q.match(/^(?:please\s+)?(?:open|launch|start|go to)\s+(youtube music|google maps|play store|youtube|google|whatsapp|instagram|facebook|telegram|spotify|chrome|gmail|maps|settings|calculator|phone|messages|photos)(?:\s+app)?$/);
+ if(app){const name=app[1];if(name==='google')launchTarget('google');else launchTarget(name);reply('Trying to open '+name+'.',false);return true}
+ if(/^(time|what time is it|show time)$/.test(q)){reply('The current time is '+new Date().toLocaleTimeString());return true}
+ if(/^(date|today|what is today|what is the date|show date)$/.test(q)){reply('Today is '+new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'}));return true}
+ if(/^(calculator|open calculator|launch calculator)$/.test(q)){showCalculator();return true}
+ if(/^(capabilities|show capabilities|what can you do|help)$/.test(q)){showCapabilities();return true}
+ if(/^(status|system status|show status)$/.test(q)){showStatus();return true}
+ if(/^(notes|open notes|show notes|take me to notes)$/.test(q)){openNotes();return true}
+ if(q.startsWith('search ')){const query=raw.replace(/^search\s+/i,'').trim();openSite('https://www.google.com/search?q='+encodeURIComponent(query));reply('Searching for '+query+'.',false);return true}
+ const calcMatch=q.match(/^calculate\s+(.+)$/);
+ if(calcMatch){const result=calc(calcMatch[1]);reply(result===null?'I could not calculate that expression.':'Result: '+result);return true}
+ if(q==='automation'||q==='open automation'||q==='automation center'){showAutomation();return true}
  return false;
-}
-async function send(){
- const raw=input.value.trim();if(!raw)return;
- add('You',raw);input.value='';
- if(runLocalAction(raw)){system.textContent='Shortcut completed • 768 AI ready';return}
- document.body.classList.add('searching');system.textContent='768 AI is thinking...';document.getElementById('coreState').textContent='THINKING';
+}async function handle(raw){let c=raw.toLowerCase().trim(),ans='I am here, Adwait. I can chat, listen, calculate, open websites, manage notes, start timers and run browser-safe shortcuts.';if(/^((hi|hello|hey)( jarvis)?)$/.test(c)||c.includes('good morning')||c.includes('good evening'))ans='Hello Adwait. I am online and ready. What are we working on?';else if(c.includes('who are you'))ans='I am 768 AI, your personal browser assistant, created for Adwait Suryawanshi.';else if(c.includes('owner')||c.includes('created by'))ans='My owner is Adwait Suryawanshi.';else if(c.includes('how are you'))ans='All systems are nominal. I am ready to help you.';else if(c.includes('thank'))ans='Anytime, Adwait. That is what I am here for.';else if(/^(time|what time is it|show time)$/.test(c))ans='The current time is '+new Date().toLocaleTimeString();else if(/^(date|today|what is today|what is the date|show date)$/.test(c))ans='Today is '+new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});else if(c.includes('status')){showStatus();ans='All local systems are operational. Voice, interface and command engine are ready.'}else if(c.includes('what can you do')||c==='help'||c.includes('capabilities')){showCapabilities();ans='I can handle voice commands, web shortcuts, calculations, notes, timers, reminders while this page is open, and browser-safe automation.'}else if(c.includes('youtube')){ans='Opening YouTube.';openSite('https://www.youtube.com')}else if(c.includes('open google')){ans='Opening Google.';openSite('https://www.google.com')}else if(c.includes('open browser'))ans='Your browser is already open. I can open a requested website for you.';else if(c.startsWith('search ')){let q=raw.replace(/^search\s+/i,'').trim();ans='Searching for '+q+'.';openSite('https://www.google.com/search?q='+encodeURIComponent(q))}else if(c.includes('calculate')||/^[0-9\s+\-*/().%]+$/.test(c)){let ex=raw.replace(/calculate/i,'').trim(),r=calc(ex);ans=r===null?'I could not calculate that expression.':'The answer is '+r+'.'}else if(c.includes('note')||c.includes('remember')){openNotes();ans='Notes panel opened. I can save your note in this browser.'}else if(c.includes('timer')){let m=c.match(/(\d+)\s*(second|seconds|minute|minutes)/);if(m){startTimer(parseInt(m[1],10)*(m[2].startsWith('minute')?60:1));ans='Timer started for '+m[1]+' '+m[2]+'.'}else{showAutomation();ans='Tell me a duration such as “timer 5 minutes”.'}}else if(c.includes('clear chat')){chat.innerHTML='';ans='Chat cleared.'}else if(c.includes('fullscreen')){document.documentElement.requestFullscreen?.();ans='Fullscreen requested.'}else if(c.includes('stop speaking')||c.includes('be quiet')){speechSynthesis.cancel();ans='Voice output stopped.'}else if(c.includes('light mode')){document.body.style.filter='brightness(1.35)';ans='Display brightness increased.'}else if(c.includes('dark mode')){document.body.style.filter='';ans='Dark 768 AI mode restored.'}if(ans==='I am here, Adwait. I can chat, listen, calculate, open websites, manage notes, start timers and run browser-safe shortcuts.'){
+ system.textContent='Thinking…';
+ const history=[...chat.querySelectorAll('.msg')].slice(-12).map(el=>({role:el.classList.contains('user')?'user':'model',text:el.innerText.replace(/^(You|768 AI):\\s*/,'')}));
+ document.body.classList.add('searching');document.getElementById('coreState').textContent='THINKING';
  try{
-  const endpoint=location.hostname.endsWith('vercel.app')?'/api/chat':VERCEL_API;
-  const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:raw,history:history.slice(-12)})});
-  const data=await res.json();
-  if(!res.ok||!data.reply)throw new Error(data.error||'AI service error');
-  history.push({role:'user',text:raw},{role:'model',text:data.reply});history=history.slice(-12);reply(data.reply);
- }catch(err){system.textContent='AI unavailable • local core active';handleLocal(raw);toast('Cloud AI unavailable; local mode used')}
+  const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),45000);
+  let response;try{response=await fetch('https://jarvis-ai-swart-one.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:raw,history}),signal:controller.signal})}finally{clearTimeout(timeout)}
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok||typeof data.reply!=='string'||!data.reply.trim())throw new Error(data.error||('AI service HTTP '+response.status));
+  const sourceText=Array.isArray(data.sources)&&data.sources.length
+   ? '\n\nSources:\n'+data.sources.map((item,index)=>(index+1)+'. '+String(item.title||'Website')+' — '+String(item.url||'')).join('\n')
+   : '';
+  reply(data.reply.trim()+sourceText);system.textContent='768 AI ready';
+ }catch(error){console.error('AI backend error:',error);reply(error.name==='AbortError'?'The AI service took too long to respond. Please try again.':'I could not reach my AI service right now. Please check the connection and try again.');system.textContent='AI connection failed';}
  finally{document.body.classList.remove('searching');document.getElementById('coreState').textContent='READY'}
+ return;
+ }reply(ans)}function listen(){const R=window.SpeechRecognition||window.webkitSpeechRecognition;if(!R){reply('Voice recognition is not supported in this browser. Try opening this site directly in a current browser with microphone permission.');return}if(listening){recognition?.stop();return}recognition=new R();recognition.lang='en-IN';recognition.interimResults=false;recognition.continuous=false;recognition.maxAlternatives=1;listening=true;app.classList.add('listening');document.getElementById('coreState').textContent='LISTENING';system.textContent='Listening... speak now';recognition.onresult=e=>{input.value=e.results[0][0].transcript;system.textContent='Command received';send()};recognition.onerror=e=>{system.textContent='Voice error: '+e.error;if(e.error==='not-allowed')toast('Microphone permission is required')};recognition.onend=()=>{listening=false;app.classList.remove('listening');document.getElementById('coreState').textContent='READY';if(system.textContent==='Listening... speak now')system.textContent='768 AI ready'};try{recognition.start()}catch(e){listening=false}}function focusInput(){input.focus()}function launchTarget(name){
+ const targets={
+  youtube:{pkg:'com.google.android.youtube',url:'https://www.youtube.com'},
+  google:{pkg:'com.google.android.googlequicksearchbox',url:'https://www.google.com/search'},
+  maps:{pkg:'com.google.android.apps.maps',url:'https://maps.google.com'},
+  gmail:{pkg:'com.google.android.gm',url:'https://mail.google.com'},
+  whatsapp:{pkg:'com.whatsapp',url:'https://wa.me/'},
+  instagram:{pkg:'com.instagram.android',url:'https://www.instagram.com'},
+  facebook:{pkg:'com.facebook.katana',url:'https://www.facebook.com'},
+  telegram:{pkg:'org.telegram.messenger',url:'https://web.telegram.org'},
+  spotify:{pkg:'com.spotify.music',url:'https://open.spotify.com'},
+  chrome:{pkg:'com.android.chrome',url:'https://www.google.com'},
+  calculator:{pkg:'com.google.android.calculator',url:null},
+  settings:{pkg:'com.android.settings',url:null},
+  phone:{pkg:'com.google.android.dialer',url:null},
+  messages:{pkg:'com.google.android.apps.messaging',url:null},
+  photos:{pkg:'com.google.android.apps.photos',url:null},
+  'play store':{pkg:'com.android.vending',url:null},
+  'youtube music':{pkg:'com.google.android.apps.youtube.music',url:'https://music.youtube.com'}
+ };
+ const target=targets[name];if(!target)return false;
+ try{
+  const bridge=window.JARVIS_NATIVE||window.JarvisAndroid;
+  if(bridge&&typeof bridge.openApp==='function'&&bridge.openApp(name)){toast('Opening '+name+' app');return true}
+ }catch(e){console.warn('Native app launch failed',e)}
+ if(target.url){
+  if(name==='google'){
+   try{
+    const bridge=window.JARVIS_NATIVE||window.JarvisAndroid;
+    if(bridge&&typeof bridge.openUrl==='function'&&bridge.openUrl('https://www.google.com/search'))return true;
+   }catch(e){console.warn('Native Google URL launch failed',e)}
+   openSite('https://www.google.com/search');return true;
+  }
+  openSite(target.url);return true;
+ }
+ toast('Cannot open '+name+' from this browser. Use the Android APK with app permissions.');return false;
 }
-function handleLocal(raw){let c=raw.toLowerCase().trim(),ans='I am here, Adwait. Cloud AI is temporarily unavailable, but my local command core is still active.';if(/^((hi|hello|hey)( jarvis)?)$/.test(c)||c.includes('good morning')||c.includes('good evening'))ans='Hello Adwait. I am online and ready.';else if(c.includes('who are you'))ans='I am 768 AI, your personal AI assistant, created for Adwait Suryawanshi.';else if(c.includes('owner')||c.includes('created by'))ans='My owner is Adwait Suryawanshi.';else if(c.includes('time'))ans='The current time is '+new Date().toLocaleTimeString();else if(c.includes('date')||c.includes('today'))ans='Today is '+new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});else if(c.includes('youtube')){ans='Opening YouTube.';openSite('https://www.youtube.com')}else if(c.includes('open google')){ans='Opening Google.';openSite('https://www.google.com')}else if(c.startsWith('search ')){let q=raw.replace(/^search\s+/i,'').trim();ans='Searching for '+q+'.';openSite('https://www.google.com/search?q='+encodeURIComponent(q))}else if(c.includes('calculate')||/^[0-9\s+\-*/().%]+$/.test(c)){let ex=raw.replace(/calculate/i,'').trim();try{let s=ex.replace(/[^0-9+\-*/().%\s]/g,'');ans='The answer is '+Function('"use strict";return ('+s+')')()+'.'}catch(e){ans='I could not calculate that expression.'}}else if(c.includes('note')||c.includes('remember')){openNotes();ans='Notes panel opened.'}else if(c.includes('clear chat')){chat.innerHTML='';ans='Chat cleared.'}else if(c.includes('stop speaking')||c.includes('be quiet')){speechSynthesis.cancel();ans='Voice output stopped.'}reply(ans)}
-function listen(){const R=window.SpeechRecognition||window.webkitSpeechRecognition;if(!R){reply('Voice recognition is not supported in this browser.');return}if(listening){recognition?.stop();return}recognition=new R();recognition.lang='en-IN';recognition.interimResults=false;recognition.continuous=false;recognition.maxAlternatives=1;listening=true;app.classList.add('listening');document.getElementById('coreState').textContent='LISTENING';system.textContent='Listening... speak now';recognition.onresult=e=>{input.value=e.results[0][0].transcript;send()};recognition.onerror=e=>{system.textContent='Voice error: '+e.error;if(e.error==='not-allowed')toast('Microphone permission is required')};recognition.onend=()=>{listening=false;app.classList.remove('listening');document.getElementById('coreState').textContent='READY'};try{recognition.start()}catch(e){listening=false}}
-document.getElementById('quickActions')?.addEventListener('click',function(event){
- const button=event.target.closest('button[data-action]');
- if(!button)return;
- event.preventDefault();
- const action=button.getAttribute('data-action');
- try{quickAction(action)}catch(error){console.error('Quick action failed:',action,error);toast('Could not run '+action);system.textContent='Shortcut error • '+action}
-});
 function quickAction(action){
  if(action==='time'){reply('The current time is '+new Date().toLocaleTimeString());return}
  if(action==='date'){reply('Today is '+new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'}));return}
  if(action==='calculator'){showCalculator();return}
  if(action==='capabilities'){showCapabilities();return}
- if(action==='youtube'){launchTarget('youtube');reply('Opening YouTube. If the app is unavailable, the website will open.',false);return}
- if(action==='google'){launchTarget('google');reply('Opening Google. If the app is unavailable, the website will open.',false);return}
+ if(action==='youtube'){launchTarget('youtube');reply('Opening YouTube.',false);return}
+ if(action==='google'){launchTarget('google');reply('Opening Google.',false);return}
  if(action==='notes'){openNotes();return}
  if(action==='status'){showStatus();return}
 }
-function showCalculator(){openModal('<h2>🧮 CALCULATOR</h2><p>Enter a basic arithmetic expression.</p><input id="calcExpression" inputmode="decimal" placeholder="Example: (22 + 2) * 3" style="width:100%;padding:13px;border-radius:10px;border:1px solid #7183ad;background:#101522;color:#fff"><p id="calcResult" class="timer" aria-live="polite">Ready</p><button class="btn" onclick="calculateExpression()">CALCULATE</button> <button class="btn" onclick="closeModal()">CLOSE</button>');}
-function calculateExpression(){
- const field=document.getElementById('calcExpression'),out=document.getElementById('calcResult');if(!field||!out)return;
- const expr=field.value.trim();
- if(!expr||/[^0-9+*/().%\s-]/.test(expr)){out.textContent='Use numbers and + − × ÷ ( ) % only.';return}
- try{const result=Function('"use strict";return ('+expr+')')();if(typeof result!=='number'||!Number.isFinite(result))throw new Error('Invalid');out.textContent='Result: '+result; }catch(e){out.textContent='Please check the expression.'}
-}
-function sayIntro(){reply('Welcome back, Adwait. 768 AI is online. Ask me anything.')}function showStatus(){openModal('<h2>▣ SYSTEM STATUS</h2><p>Cloud AI backend: <b class="ok">Vercel + Gemini</b></p><p>API key: <b class="ok">SERVER-SIDE</b></p><p>Voice recognition: <b class="ok">READY*</b></p><p>Speech synthesis: <b class="ok">READY</b></p><p>Local commands: <b class="ok">ONLINE</b></p><p>*Voice support depends on browser and microphone permission.</p><button class="btn" onclick="closeModal()">CLOSE</button>')}function showCapabilities(){openModal('<h2>⚡ 768 AI AI</h2><p>🧠 General AI conversation through Gemini</p><p>📚 Learning, explanations and reasoning</p><p>📝 Writing and planning help</p><p>🎙 Voice input and spoken replies</p><p>🌐 Browser-safe web shortcuts</p><p>🧮 Calculations and local tools</p><p>🔐 API key stays on the Vercel server</p><button class="btn" onclick="closeModal()">CLOSE</button>')}function showSettings(){const enabled=localStorage.getItem('768_autocorrect')!=='off';openModal('<h2>⚙ SETTINGS</h2><p>Owner: <b>'+OWNER+'</b></p><p>Language: English (India)</p><p>AI: Gemini via secure Vercel backend</p><p>Voice: Browser speech synthesis</p><p>Storage: Local browser storage</p><p><b>Typing assistance:</b> '+(enabled?'ON':'OFF')+'</p><button class="btn" onclick="toggleAutocorrect()">TURN '+(enabled?'OFF':'ON')+' AUTOCORRECT</button><p class="small">Uses your phone keyboard and browser spellchecker for corrections and spelling suggestions.</p><button class="btn" onclick="clearJarvisNotes()">CLEAR NOTES</button> <button class="btn" onclick="closeModal()">CLOSE</button>')}function clearJarvisNotes(){localStorage.removeItem('jarvisNotes');toast('Local notes cleared');}function toggleAutocorrect(){const enabled=localStorage.getItem('768_autocorrect')==='off';localStorage.setItem('768_autocorrect',enabled?'on':'off');applyAutocorrect();showSettings()}function applyAutocorrect(){const enabled=localStorage.getItem('768_autocorrect')!=='off';const field=document.getElementById('input');if(field){field.setAttribute('autocorrect',enabled?'on':'off');field.spellcheck=enabled;field.setAttribute('autocapitalize',enabled?'sentences':'off')}}function openNotes(){let notes=localStorage.getItem('jarvisNotes')||'';openModal('<h2>📝 768 AI NOTES</h2><textarea class="noteInput" id="noteBox" placeholder="Write something for 768 AI to remember on this browser...">'+escapeHtml(notes)+'</textarea><br><button class="btn" onclick="saveNotes()">SAVE NOTE</button> <button class="btn" onclick="closeModal()">CLOSE</button>')}function saveNotes(){localStorage.setItem('jarvisNotes',document.getElementById('noteBox').value);toast('Note saved locally');closeModal();reply('Your note is saved locally in this browser.')}function showAutomation(){openModal('<h2>⚙ AUTOMATION CENTER</h2><p>Try commands such as:</p><p>• “Open YouTube”</p><p>• “Search space news”</p><p>• “Calculate 22+2”</p><p>• “Timer 5 minutes”</p><p>• “Take me to notes”</p><div class="timer" id="timerDisplay">READY</div><button class="btn" onclick="startTimer(60)">1 MIN TIMER</button> <button class="btn" onclick="startTimer(300)">5 MIN TIMER</button> <button class="btn" onclick="closeModal()">CLOSE</button>')}function startTimer(sec){clearInterval(timerHandle);let end=Date.now()+sec*1000;openModal('<h2>⏱ 768 AI TIMER</h2><div class="timer" id="timerDisplay"></div><button class="btn" onclick="clearInterval(timerHandle);closeModal()">STOP</button>');timerHandle=setInterval(()=>{let left=Math.max(0,end-Date.now()),s=Math.ceil(left/1000),m=Math.floor(s/60),r=s%60,el=document.getElementById('timerDisplay');if(el)el.textContent=m+':'+String(r).padStart(2,'0');if(left<=0){clearInterval(timerHandle);toast('Timer complete');reply('Your timer is complete, Adwait.')}},250)}function openModal(html){document.getElementById('modalContent').innerHTML=html;document.getElementById('modal').style.display='flex'}function closeModal(){document.getElementById('modal').style.display='none'}document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});input.addEventListener('keydown',e=>{if(e.key==='Enter')send()});applyAutocorrect();function updateClock(){let d=new Date();document.getElementById('clock').textContent=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});document.getElementById('today').textContent=d.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short',year:'numeric'})}setInterval(updateClock,1000);updateClock();add('768 AI','Good evening, Adwait. 768 AI AI is online. Ask me anything.');
+function showCalculator(){openModal('<h2>🧮 CALCULATOR</h2><p>Enter an arithmetic expression.</p><input id="calcExpression" inputmode="decimal" placeholder="Example: (22 + 2) * 3" style="width:100%;padding:13px;border-radius:10px;border:1px solid #7183ad;background:#101522;color:#fff"><p id="calcResult" class="timer" aria-live="polite">Ready</p><button class="btn" onclick="calculateExpression()">CALCULATE</button> <button class="btn" onclick="closeModal()">CLOSE</button>')}
+function calculateExpression(){const field=document.getElementById('calcExpression'),out=document.getElementById('calcResult');if(!field||!out)return;const expr=field.value.trim();if(!expr||/[^0-9+*/().%\\s-]/.test(expr)){out.textContent='Use numbers and + − × ÷ ( ) % only.';return}try{const result=Function('"use strict";return ('+expr+')')();if(typeof result!=='number'||!Number.isFinite(result))throw new Error('Invalid');out.textContent='Result: '+result}catch(e){out.textContent='Please check the expression.'}}
+function sayIntro(){reply('Welcome back, Adwait. 768 AI is online. Your command center is ready.')}function showStatus(){openModal('<h2>▣ SYSTEM STATUS</h2><p>Voice recognition: <b class="ok">READY*</b></p><p>Speech synthesis: <b class="ok">READY</b></p><p>Local command engine: <b class="ok">ONLINE</b></p><p>Browser shortcuts: <b class="ok">READY</b></p><p>Local notes: <b class="ok">READY</b></p><p>Timers: <b class="ok">READY</b></p><p class="small">*Voice support depends on the browser and microphone permission.</p><button class="btn" onclick="closeModal()">CLOSE</button>')}function showCapabilities(){openModal('<h2>⚡ 768 AI CAPABILITIES</h2><p>🎙 Voice commands</p><p>🧮 Calculator</p><p>🌐 Google and website shortcuts</p><p>📝 Local notes</p><p>⏱ Timers and reminders while this page is active</p><p>💬 Friendly local conversation</p><p>🖥 Fullscreen and interface controls</p><p>🔧 Browser-safe automation</p><p class="small">A real cloud AI brain and full phone/system control require additional services and permissions; this version intentionally uses no exposed API key.</p><button class="btn" onclick="closeModal()">CLOSE</button>')}function showSettings(){const enabled=localStorage.getItem('768_autocorrect')!=='off';openModal('<h2>⚙ SETTINGS</h2><p>Owner: <b>'+OWNER+'</b></p><p>Language: English (India)</p><p>AI: Gemini via secure Vercel backend</p><p>Voice: Browser speech synthesis</p><p>Storage: Local browser storage</p><p><b>Typing assistance:</b> '+(enabled?'ON':'OFF')+'</p><button class="btn" onclick="toggleAutocorrect()">TURN '+(enabled?'OFF':'ON')+' AUTOCORRECT</button><p class="small">Uses your phone keyboard and browser spellchecker for corrections and spelling suggestions.</p><button class="btn" onclick="clearJarvisNotes()">CLEAR NOTES</button> <button class="btn" onclick="closeModal()">CLOSE</button>')}function clearJarvisNotes(){localStorage.removeItem('jarvisNotes');toast('Local notes cleared');}function toggleAutocorrect(){const enabled=localStorage.getItem('768_autocorrect')==='off';localStorage.setItem('768_autocorrect',enabled?'on':'off');applyAutocorrect();showSettings()}function applyAutocorrect(){const enabled=localStorage.getItem('768_autocorrect')!=='off';const field=document.getElementById('input');if(field){field.setAttribute('autocorrect',enabled?'on':'off');field.spellcheck=enabled;field.setAttribute('autocapitalize',enabled?'sentences':'off')}}function openNotes(){let notes=localStorage.getItem('jarvisNotes')||'';openModal('<h2>📝 768 AI NOTES</h2><textarea class="noteInput" id="noteBox" placeholder="Write something for 768 AI to remember on this browser...">'+escapeHtml(notes)+'</textarea><br><button class="btn" onclick="saveNotes()">SAVE NOTE</button> <button class="btn" onclick="closeModal()">CLOSE</button>')}function saveNotes(){localStorage.setItem('jarvisNotes',document.getElementById('noteBox').value);toast('Note saved locally');closeModal();reply('Your note is saved locally in this browser.')}function showAutomation(){openModal('<h2>⚙ AUTOMATION CENTER</h2><p>Use voice or type commands like:</p><p>• “Open YouTube”</p><p>• “Search space news”</p><p>• “Calculate 22+2”</p><p>• “Timer 5 minutes”</p><p>• “Take me to notes”</p><p>• “What time is it”</p><div class="timer" id="timerDisplay">READY</div><button class="btn" onclick="startTimer(60)">1 MIN TIMER</button> <button class="btn" onclick="startTimer(300)">5 MIN TIMER</button> <button class="btn" onclick="closeModal()">CLOSE</button>')}function startTimer(sec){clearInterval(timerHandle);let end=Date.now()+sec*1000;openModal('<h2>⏱ 768 AI TIMER</h2><div class="timer" id="timerDisplay"></div><button class="btn" onclick="clearInterval(timerHandle);closeModal()">STOP</button>');timerHandle=setInterval(()=>{let left=Math.max(0,end-Date.now()),s=Math.ceil(left/1000),m=Math.floor(s/60),r=s%60,el=document.getElementById('timerDisplay');if(el)el.textContent=m+':'+String(r).padStart(2,'0');if(left<=0){clearInterval(timerHandle);toast('Timer complete');reply('Your timer is complete, Adwait.')}},250)}function openModal(html){document.getElementById('modalContent').innerHTML=html;document.getElementById('modal').style.display='flex'}function closeModal(){document.getElementById('modal').style.display='none'}document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});input.addEventListener('keydown',e=>{if(e.key==='Enter')send()});applyAutocorrect();function updateClock(){let d=new Date();document.getElementById('clock').textContent=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});document.getElementById('today').textContent=d.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short',year:'numeric'})}setInterval(updateClock,1000);updateClock();add('768 AI',(h=>h<12?'Good morning':h<17?'Good afternoon':'Good evening')(new Date().getHours())+', Adwait. 768 AI is online. I am ready when you are.');
 </script>
 <script>
 (function(){
@@ -401,7 +418,7 @@ function sayIntro(){reply('Welcome back, Adwait. 768 AI is online. Ask me anythi
  const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
  window.openChatHistory=function(){
   const sessions=read(ARCHIVE,[]);
-  const entries=sessions.map((s,i)=>'<button class="btn" style="display:block;width:100%;text-align:left;margin:7px 0" onclick="768RestoreChat('+i+')">'+new Date(s.date).toLocaleString()+' · '+s.messages.length+' messages<br><span class="small">'+esc((s.messages.find(m=>m.who==='You')||{}).text||'Chat')+'</span></button>').join('');
+  const entries=sessions.map((s,i)=>'<button class="btn" style="display:block;width:100%;text-align:left;margin:7px 0" onclick="window[\'768RestoreChat\']('+i+')">'+new Date(s.date).toLocaleString()+' · '+s.messages.length+' messages<br><span class="small">'+esc((s.messages.find(m=>m.who==='You')||{}).text||'Chat')+'</span></button>').join('');
   openModal('<h2>🗂 CHAT HISTORY</h2><p>Previous conversations are saved on this device. New chats start empty.</p><div style="max-height:48vh;overflow:auto">'+(entries||'<p>No previous chats saved yet.</p>')+'</div><button class="btn" onclick="768ClearHistory()">CLEAR HISTORY</button> <button class="btn" onclick="closeModal()">CLOSE</button>');
  };
  window['768RestoreChat']=function(i){const sessions=read(ARCHIVE,[]);const s=sessions[i];if(!s)return;archive();box.innerHTML='';s.messages.forEach(m=>{if(typeof originalAdd==='function')originalAdd(m.who,m.text)});saveActive();closeModal()};
