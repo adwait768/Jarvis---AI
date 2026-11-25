@@ -1,65 +1,73 @@
 // Daily 5:00 AM IST phone call via Twilio.
-// Required Vercel environment variables (set by the adult account owner):
-// MORNING_CALL_ENABLED=true
-// MORNING_CALL_TO=+91...
-// TWILIO_ACCOUNT_SID=AC...
-// TWILIO_AUTH_TOKEN=...
-// TWILIO_FROM_NUMBER=+1...
-// CRON_SECRET=<long random secret>
-//
+// Vercel Cron sends Authorization: Bearer <CRON_SECRET> automatically.
 // GET ?dryRun=1 checks configuration only and never places a call.
 
-function json(status, payload) {
-  return new Response(JSON.stringify(payload), {
-    status,
-    headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }
-  });
+function sendJson(res, status, payload) {
+  res.statusCode = status;
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.setHeader("Cache-Control", "no-store");
+  res.end(JSON.stringify(payload));
 }
 
 function validE164(value) {
-  return typeof value === "string" && /^\+[1-9]\d{7,14}$/.test(value);
+  return typeof value === "string" && /^\\+[1-9]\\d{7,14}$/.test(value);
 }
 
-export async function GET(request) {
-  const url = new URL(request.url);
-  const dryRun = url.searchParams.get("dryRun") === "1";
-  const secret = process.env.CRON_SECRET;
-  const authorization = request.headers.get("authorization") || "";
-
-  if (!secret || authorization !== `Bearer ${secret}`) {
-    return json(401, { ok: false, error: "Unauthorized" });
+export default async function handler(req, res) {
+  if (req.method !== "GET") {
+    res.setHeader("Allow", "GET");
+    return sendJson(res, 405, { ok: false, error: "Method not allowed." });
   }
-
-  const config = {
-    enabled: process.env.MORNING_CALL_ENABLED === "true",
-    toValid: validE164(process.env.MORNING_CALL_TO),
-    fromValid: validE164(process.env.TWILIO_FROM_NUMBER),
-    accountSidPresent: Boolean(process.env.TWILIO_ACCOUNT_SID),
-    authTokenPresent: Boolean(process.env.TWILIO_AUTH_TOKEN)
-  };
-  const configured = config.toValid && config.fromValid &&
-    config.accountSidPresent && config.authTokenPresent;
-
-  if (dryRun) {
-    return json(200, { ok: true, mode: "dry-run", configured, enabled: config.enabled, checks: {
-      recipientNumberValid: config.toValid,
-      callerNumberValid: config.fromValid,
-      accountCredentialsPresent: config.accountSidPresent && config.authTokenPresent
-    }});
-  }
-
-  if (!config.enabled) return json(409, { ok: false, error: "Calling is disabled. Enable it only after the account owner approves the recurring calls and charges." });
-  if (!configured) return json(503, { ok: false, error: "Phone-call configuration is incomplete." });
-
-  const accountSid = process.env.TWILIO_ACCOUNT_SID;
-  const authToken = process.env.TWILIO_AUTH_TOKEN;
-  const form = new URLSearchParams({
-    To: process.env.MORNING_CALL_TO,
-    From: process.env.TWILIO_FROM_NUMBER,
-    Twiml: "<Response><Pause length=\\"1\\"/><Say voice=\\"alice\\">Good morning. This is your 768 AI. It is 5 AM. Have a good day.</Say></Response>"
-  });
 
   try {
+    const secret = (process.env.CRON_SECRET || "").trim();
+    const authorization = String(req.headers?.authorization || "").trim();
+    if (!secret || authorization !== `Bearer ${secret}`) {
+      return sendJson(res, 401, { ok: false, error: "Unauthorized" });
+    }
+
+    const requestUrl = new URL(req.url || "/api/morning-call", `https://${req.headers?.host || "localhost"}`);
+    const dryRun = requestUrl.searchParams.get("dryRun") === "1";
+
+    const config = {
+      enabled: process.env.MORNING_CALL_ENABLED === "true",
+      toValid: validE164(process.env.MORNING_CALL_TO),
+      fromValid: validE164(process.env.TWILIO_FROM_NUMBER),
+      accountSidPresent: Boolean(process.env.TWILIO_ACCOUNT_SID?.trim()),
+      authTokenPresent: Boolean(process.env.TWILIO_AUTH_TOKEN?.trim())
+    };
+    const configured = config.toValid && config.fromValid &&
+      config.accountSidPresent && config.authTokenPresent;
+
+    if (dryRun) {
+      return sendJson(res, 200, {
+        ok: true,
+        mode: "dry-run",
+        configured,
+        enabled: config.enabled,
+        checks: {
+          recipientNumberValid: config.toValid,
+          callerNumberValid: config.fromValid,
+          accountCredentialsPresent: config.accountSidPresent && config.authTokenPresent
+        }
+      });
+    }
+
+    if (!config.enabled) {
+      return sendJson(res, 409, { ok: false, error: "Calling is disabled." });
+    }
+    if (!configured) {
+      return sendJson(res, 503, { ok: false, error: "Phone-call configuration is incomplete." });
+    }
+
+    const accountSid = process.env.TWILIO_ACCOUNT_SID.trim();
+    const authToken = process.env.TWILIO_AUTH_TOKEN.trim();
+    const form = new URLSearchParams({
+      To: process.env.MORNING_CALL_TO.trim(),
+      From: process.env.TWILIO_FROM_NUMBER.trim(),
+      Twiml: '<Response><Pause length="1"/><Say voice="alice">Good morning. This is your 768 AI. It is 5 AM. Have a good day.</Say></Response>'
+    });
+
     const response = await fetch(
       `https://api.twilio.com/2010-04-01/Accounts/${encodeURIComponent(accountSid)}/Calls.json`,
       {
@@ -71,39 +79,26 @@ export async function GET(request) {
         body: form.toString()
       }
     );
+
     const result = await response.json().catch(() => ({}));
     if (!response.ok) {
-      console.error("Twilio call request failed:", response.status, result?.message || "Unknown provider error");
-      return json(502, { ok: false, error: "Phone provider rejected the call request.", providerStatus: response.status });
+      console.error("Twilio call request rejected:", response.status, result?.code || "unknown", result?.message || "no message");
+      return sendJson(res, 502, {
+        ok: false,
+        error: "Twilio rejected the call request.",
+        providerStatus: response.status,
+        providerCode: result?.code || null
+      });
     }
-    return json(200, { ok: true, status: "call-requested", callStatus: result.status || "queued" });
-  } catch (error) {
-    console.error("Twilio request error:", error);
-    return json(502, { ok: false, error: "Could not contact the phone provider." });
-  }
-}
 
-// Vercel Node.js entry point, matching the existing /api/chat function.
-export default async function handler(req, res) {
-  try {
-    const headers = new Headers();
-    for (const [key, value] of Object.entries(req.headers || {})) {
-      if (Array.isArray(value)) headers.set(key, value.join(", "));
-      else if (value != null) headers.set(key, String(value));
-    }
-    const host = req.headers?.host || "localhost";
-    const url = new URL(req.url || "/api/morning-call", `https://${host}`);
-    const request = new Request(url, { method: String(req.method || "GET").toUpperCase(), headers });
-    const response = request.method === "GET"
-      ? await GET(request)
-      : json(405, { ok: false, error: "Method not allowed." });
-    res.statusCode = response.status;
-    response.headers.forEach((value, key) => res.setHeader(key, value));
-    res.end(await response.text());
+    console.log("Twilio call accepted:", result.sid, result.status);
+    return sendJson(res, 200, {
+      ok: true,
+      status: "call-requested",
+      callStatus: result.status || "queued"
+    });
   } catch (error) {
-    console.error("Morning-call function entry error:", error);
-    res.statusCode = 500;
-    res.setHeader("Content-Type", "application/json; charset=utf-8");
-    res.end(JSON.stringify({ ok: false, error: "Morning-call function failed." }));
+    console.error("Morning-call handler failed:", error?.stack || error);
+    return sendJson(res, 500, { ok: false, error: "Morning-call function failed." });
   }
 }
