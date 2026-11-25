@@ -17,7 +17,7 @@ function json(status, payload) {
 }
 
 function validE164(value) {
-  return typeof value === "string" && /^\+[1-9]\d{7,14}$/.test(value);
+  return typeof value === "string" && /^\\+[1-9]\\d{7,14}$/.test(value);
 }
 
 export async function GET(request) {
@@ -56,7 +56,7 @@ export async function GET(request) {
   const form = new URLSearchParams({
     To: process.env.MORNING_CALL_TO,
     From: process.env.TWILIO_FROM_NUMBER,
-    Twiml: "<Response><Pause length=\"1\"/><Say voice=\"alice\">Good morning. This is your 768 AI. It is 5 AM. Have a good day.</Say></Response>"
+    Twiml: "<Response><Pause length=\\"1\\"/><Say voice=\\"alice\\">Good morning. This is your 768 AI. It is 5 AM. Have a good day.</Say></Response>"
   });
 
   try {
@@ -80,5 +80,30 @@ export async function GET(request) {
   } catch (error) {
     console.error("Twilio request error:", error);
     return json(502, { ok: false, error: "Could not contact the phone provider." });
+  }
+}
+
+// Vercel Node.js entry point, matching the existing /api/chat function.
+export default async function handler(req, res) {
+  try {
+    const headers = new Headers();
+    for (const [key, value] of Object.entries(req.headers || {})) {
+      if (Array.isArray(value)) headers.set(key, value.join(", "));
+      else if (value != null) headers.set(key, String(value));
+    }
+    const host = req.headers?.host || "localhost";
+    const url = new URL(req.url || "/api/morning-call", `https://${host}`);
+    const request = new Request(url, { method: String(req.method || "GET").toUpperCase(), headers });
+    const response = request.method === "GET"
+      ? await GET(request)
+      : json(405, { ok: false, error: "Method not allowed." });
+    res.statusCode = response.status;
+    response.headers.forEach((value, key) => res.setHeader(key, value));
+    res.end(await response.text());
+  } catch (error) {
+    console.error("Morning-call function entry error:", error);
+    res.statusCode = 500;
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+    res.end(JSON.stringify({ ok: false, error: "Morning-call function failed." }));
   }
 }
