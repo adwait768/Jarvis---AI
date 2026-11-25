@@ -17,7 +17,7 @@ function json(status, payload) {
 }
 
 function validE164(value) {
-  return typeof value === "string" && /^\\+[1-9]\\d{7,14}$/.test(value);
+  return typeof value === "string" && /^\+[1-9]\d{7,14}$/.test(value);
 }
 
 export async function GET(request) {
